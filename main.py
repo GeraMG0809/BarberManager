@@ -8,24 +8,26 @@ app = Flask(__name__,static_folder='static')
 if __name__ == '__main__':
 
 
-    @app.route('/')
+    @app.route('/', methods=['GET', 'POST'])
     def index():
-        user = session.get('user')
-
-        return render_template('index.html',user = user)
-    
-    @app.route('/login', methods=['GET', 'POST'])
-    def login():
+        
         if request.method == 'POST':
-            email = request.form.get('email')
-            password = request.form.get('password')
+            if "login" in request.form:
+                return login()
+            elif "cita" in request.form:
+                return new_reserv()
+        
+        return render_template('index.html')
 
-            print(email)
-            print(password)
-            return f"Datos recibidos: Email={email}, Password={password}"
+    def login():
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-        return "Página de inicio - Usa un formulario para enviar datos."        
+        print(f"Correo electronico: {email} \n Contraseña: {password}")
 
+
+    def new_reserv():
+        pass
 
     try:
         app.run(host='0.0.0.0',port=5050,debug=True)
