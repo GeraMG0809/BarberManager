@@ -29,23 +29,23 @@
   
   /* Custom Classes */
   .bg-orange-light {
-    background-color: var(--orange-50);
+    background-color: var(--orange-50) !important;
   }
   
   .bg-orange {
-    background-color: var(--orange-100);
+    background-color: var(--orange-100) !important;
   }
   
   .bg-brown {
-    background-color: var(--brown-800);
+    background-color: var(--brown-800) !important;
   }
   
   .text-orange {
-    color: var(--orange-600);
+    color: var(--orange-600) !important;
   }
   
   .text-brown {
-    color: var(--brown-800);
+    color: var(--brown-800) !important;
   }
   
   .border-orange {
@@ -53,13 +53,13 @@
   }
   
   .btn-orange {
-    background-color: var(--orange-600);
-    color: white;
+    background-color: var(--orange-600) !important;
+    color: white !important;
   }
   
   .btn-orange:hover {
-    background-color: var(--orange-700);
-    color: white;
+    background-color: var(--orange-700) !important;
+    color: white !important;
   }
   
   /* Cursor pointer for cards */
