@@ -1,16 +1,542 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbería Elegante</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <form method="post">
-        <h1>Iniciar sesion</h1>
-        <input type="email" name="email">
-        <input type="password" name="password">
-        <button type="submit">Iniciar sesion</button>
-    </form>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-brown sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Barbería Elegante</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#paquetes">Paquetes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#beneficios">Beneficios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#tienda">Tienda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#barberos">Barberos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#testimonios">Testimonios</a>
+          </li>
+        </ul>
+        <button class="btn btn-outline-light rounded-circle" data-bs-toggle="modal" data-bs-target="#loginModal">
+          <i class="bi bi-person"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="py-5 bg-brown text-white text-center">
+    <div class="container py-5">
+      <h1 class="display-4 fw-bold mb-4">Bienvenido a Barbería Elegante</h1>
+      <p class="lead mb-4">Donde el estilo se encuentra con la tradición</p>
+      <a href="#reservar" class="btn btn-orange btn-lg">Reservar Cita</a>
+    </div>
+  </section>
+
+  <!-- Packages Section -->
+  <section id="paquetes" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5 text-brown fw-bold">Nuestros Paquetes</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 bg-orange-light border-orange">
+            <div class="card-body">
+              <h3 class="card-title text-brown">Corte Clásico</h3>
+              <p class="card-text text-muted">Corte de cabello tradicional</p>
+              <p class="fs-2 fw-bold text-orange">$20</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 bg-orange-light border-orange">
+            <div class="card-body">
+              <h3 class="card-title text-brown">Afeitado Real</h3>
+              <p class="card-text text-muted">Afeitado con navaja y toalla caliente</p>
+              <p class="fs-2 fw-bold text-orange">$25</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 bg-orange-light border-orange">
+            <div class="card-body">
+              <h3 class="card-title text-brown">Combo Completo</h3>
+              <p class="card-text text-muted">Corte de cabello y afeitado</p>
+              <p class="fs-2 fw-bold text-orange">$40</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section id="beneficios" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5 text-brown fw-bold">Beneficios de Elegirnos</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100 bg-orange-light border-orange">
+            <div class="card-body">
+              <h3 class="card-title text-center text-brown fw-bold mb-4">Invitado</h3>
+              <ul class="list-unstyled">
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Corte de cabello profesional</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Ambiente relajado y acogedor</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Productos de alta calidad</li>
+                <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Descuentos en servicios</li>
+                <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Reservas prioritarias</li>
+                <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Tratamientos exclusivos</li>
+              </ul>
+              <div class="text-center mt-4">
+                <button class="btn btn-orange w-100">Hazte Miembro</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100 bg-orange border-orange">
+            <div class="card-body">
+              <h3 class="card-title text-center text-brown fw-bold mb-4">Miembro</h3>
+              <ul class="list-unstyled">
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Corte de cabello profesional</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Ambiente relajado y acogedor</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Productos de alta calidad</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Descuentos en servicios</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Reservas prioritarias</li>
+                <li class="mb-3"><i class="bi bi-check-circle-fill text-orange me-2"></i> Tratamientos exclusivos</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="tienda" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5 text-brown fw-bold">Nuestra Tienda</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://via.placeholder.com/300" class="card-img-top" alt="Pomada para Cabello">
+            <div class="card-body">
+              <h3 class="card-title">Pomada para Cabello</h3>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="fs-4 fw-bold text-success">$15</span>
+                <button class="btn btn-primary">Comprar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://via.placeholder.com/300" class="card-img-top" alt="Aceite para Barba">
+            <div class="card-body">
+              <h3 class="card-title">Aceite para Barba</h3>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="fs-4 fw-bold text-success">$20</span>
+                <button class="btn btn-primary">Comprar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="https://via.placeholder.com/300" class="card-img-top" alt="Cepillo para Barba">
+            <div class="card-body">
+              <h3 class="card-title">Cepillo para Barba</h3>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="fs-4 fw-bold text-success">$12</span>
+                <button class="btn btn-primary">Comprar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barbers Section -->
+  <section id="barberos" class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5 text-brown fw-bold">Nuestros Barberos</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 bg-orange-light border-orange cursor-pointer" data-bs-toggle="modal" data-bs-target="#barberModal1">
+            <img src="https://via.placeholder.com/300" class="card-img-top rounded-circle p-3" alt="Juan Pérez">
+            <div class="card-body text-center">
+              <h3 class="card-title text-brown">Juan Pérez</h3>
+              <p class="card-text text-muted">Cortes clásicos</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 bg-orange-light border-orange cursor-pointer" data-bs-toggle="modal" data-bs-target="#barberModal2">
+            <img src="https://via.placeholder.com/300" class="card-img-top rounded-circle p-3" alt="Carlos Rodríguez">
+            <div class="card-body text-center">
+              <h3 class="card-title text-brown">Carlos Rodríguez</h3>
+              <p class="card-text text-muted">Barbas y afeitados</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 bg-orange-light border-orange cursor-pointer" data-bs-toggle="modal" data-bs-target="#barberModal3">
+            <img src="https://via.placeholder.com/300" class="card-img-top rounded-circle p-3" alt="Miguel González">
+            <div class="card-body text-center">
+              <h3 class="card-title text-brown">Miguel González</h3>
+              <p class="card-text text-muted">Estilos modernos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonios" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5 text-brown fw-bold">Lo que dicen nuestros clientes</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="card-title">Pedro Sánchez</h3>
+              <p class="card-text fst-italic">"El mejor corte de pelo que he tenido. ¡Volveré seguro!"</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="card-title">Luis Martínez</h3>
+              <p class="card-text fst-italic">"Ambiente genial y servicio de primera. Totalmente recomendado."</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="card-title">Andrés López</h3>
+              <p class="card-text fst-italic">"Me encanta cómo cuidan cada detalle. Son verdaderos profesionales."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking Form Section -->
+  <section id="reservar" class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card bg-light shadow">
+            <div class="card-body p-4">
+              <h2 class="text-center mb-4 text-brown fw-bold">Reserva tu cita</h2>
+              <form id="bookingForm">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="mb-3">
+                  <label for="phone" class="form-label">Teléfono</label>
+                  <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <div class="mb-3">
+                  <label for="date" class="form-label">Fecha</label>
+                  <input type="date" class="form-control" id="date" required>
+                </div>
+                <div class="mb-3">
+                  <label for="time" class="form-label">Hora</label>
+                  <input type="time" class="form-control" id="time" required>
+                </div>
+                <div class="mb-3">
+                  <label for="barber" class="form-label">Barbero</label>
+                  <select class="form-select" id="barber" required>
+                    <option value="" selected disabled>Selecciona un barbero</option>
+                    <option value="juan">Juan Pérez</option>
+                    <option value="carlos">Carlos Rodríguez</option>
+                    <option value="miguel">Miguel González</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="service" class="form-label">Servicio</label>
+                  <select class="form-select" id="service" required>
+                    <option value="" selected disabled>Selecciona un servicio</option>
+                    <option value="corte">Corte de pelo</option>
+                    <option value="afeitado">Afeitado</option>
+                    <option value="combo">Combo completo</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-orange w-100">Reservar Cita</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brown text-white py-4">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4 mb-3 mb-md-0">
+          <h3 class="fw-bold">Barbería Elegante</h3>
+          <p>Tu barbería de confianza</p>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0 text-center">
+          <nav class="nav justify-content-center">
+            <a class="nav-link text-white" href="#paquetes">Paquetes</a>
+            <a class="nav-link text-white" href="#beneficios">Beneficios</a>
+            <a class="nav-link text-white" href="#tienda">Tienda</a>
+            <a class="nav-link text-white" href="#barberos">Barberos</a>
+            <a class="nav-link text-white" href="#testimonios">Testimonios</a>
+          </nav>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <p>&copy; 2023 Barbería Elegante. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Login/Signup Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Cuenta de Usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs" id="authTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button" role="tab" aria-controls="login-tab-pane" aria-selected="true">Iniciar Sesión</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-tab-pane" type="button" role="tab" aria-controls="signup-tab-pane" aria-selected="false">Registrarse</button>
+            </li>
+          </ul>
+          <div class="tab-content pt-3" id="authTabsContent">
+            <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
+              <form id="loginForm">
+                <div class="mb-3">
+                  <label for="loginEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="loginEmail" placeholder="tu@email.com">
+                </div>
+                <div class="mb-3">
+                  <label for="loginPassword" class="form-label">Contraseña</label>
+                  <input type="password" class="form-control" id="loginPassword">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
+              <form id="signupForm">
+                <div class="mb-3">
+                  <label for="signupName" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="signupName" placeholder="Tu nombre">
+                </div>
+                <div class="mb-3">
+                  <label for="signupPhone" class="form-label">Teléfono</label>
+                  <input type="tel" class="form-control" id="signupPhone" placeholder="Tu teléfono">
+                </div>
+                <div class="mb-3">
+                  <label for="signupEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="signupEmail" placeholder="tu@email.com">
+                </div>
+                <div class="mb-3">
+                  <label for="signupPassword" class="form-label">Contraseña</label>
+                  <input type="password" class="form-control" id="signupPassword">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barber Modals -->
+  <!-- Barber Modal 1 -->
+  <div class="modal fade" id="barberModal1" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold text-brown">Juan Pérez</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <img src="https://via.placeholder.com/300" class="img-fluid rounded-circle mb-3" alt="Juan Pérez">
+              <p class="text-muted">Cortes clásicos</p>
+              <div class="d-flex justify-content-center align-items-center">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-half text-warning"></i>
+                <span class="ms-2">4.8</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h4 class="fw-bold text-brown mb-3">Comentarios</h4>
+              <ul class="list-unstyled">
+                <li class="mb-2">• Excelente trabajo</li>
+                <li class="mb-2">• Muy profesional</li>
+                <li class="mb-2">• Lo recomiendo</li>
+              </ul>
+              <h4 class="fw-bold text-brown mb-3 mt-4">Trabajos realizados</h4>
+              <div class="row g-2">
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 1">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 2">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 3">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 4">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barber Modal 2 -->
+  <div class="modal fade" id="barberModal2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold text-brown">Carlos Rodríguez</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <img src="https://via.placeholder.com/300" class="img-fluid rounded-circle mb-3" alt="Carlos Rodríguez">
+              <p class="text-muted">Barbas y afeitados</p>
+              <div class="d-flex justify-content-center align-items-center">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <span class="ms-2">4.9</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h4 class="fw-bold text-brown mb-3">Comentarios</h4>
+              <ul class="list-unstyled">
+                <li class="mb-2">• El mejor para barbas</li>
+                <li class="mb-2">• Muy detallista</li>
+                <li class="mb-2">• Siempre quedo satisfecho</li>
+              </ul>
+              <h4 class="fw-bold text-brown mb-3 mt-4">Trabajos realizados</h4>
+              <div class="row g-2">
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 1">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 2">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 3">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 4">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barber Modal 3 -->
+  <div class="modal fade" id="barberModal3" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold text-brown">Miguel González</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <img src="https://via.placeholder.com/300" class="img-fluid rounded-circle mb-3" alt="Miguel González">
+              <p class="text-muted">Estilos modernos</p>
+              <div class="d-flex justify-content-center align-items-center">
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-half text-warning"></i>
+                <span class="ms-2">4.7</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h4 class="fw-bold text-brown mb-3">Comentarios</h4>
+              <ul class="list-unstyled">
+                <li class="mb-2">• Muy creativo</li>
+                <li class="mb-2">• Entiende perfectamente lo que quiero</li>
+                <li class="mb-2">• Resultados increíbles</li>
+              </ul>
+              <h4 class="fw-bold text-brown mb-3 mt-4">Trabajos realizados</h4>
+              <div class="row g-2">
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 1">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 2">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 3">
+                </div>
+                <div class="col-6">
+                  <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 4">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="js/script.js"></script>
 </body>
 </html>
+
