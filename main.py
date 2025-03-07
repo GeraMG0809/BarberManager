@@ -10,20 +10,24 @@ if __name__ == '__main__':
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
+        form_id = None
         
-        if request.method == 'POST':
-            if "login" in request.form:
-                return login()
-            elif "cita" in request.form:
-                return new_reserv()
+        if request.method == "POST":
+            form_id = request.form.get("form_id")  # Identificar el formulario enviado
+            
+        if form_id == "loginForm":  # Si el ID del formulario es "loginForm"
+            return login()
+        elif form_id == "citaForm":  # Si el ID del formulario es "citaForm"
+            return new_reserv()
         
+
         return render_template('index.html')
 
     def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        print(f"Correo electronico: {email} \n Contraseña: {password}")
+        return f"Correo electronico: {email} \n Contraseña: {password}"
 
 
     def new_reserv():
