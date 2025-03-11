@@ -31,19 +31,30 @@ CREATE TABLE Cita(
     id_cita INT AUTO_INCREMENT PRIMARY KEY,
     id_barbero INT NOT NULL,
     id_usuario INT NOT NULL,
+    id_paquete INT NOT NULL,
     hora_cita TIME NOT NULL,
     fecha DATE NOT NULL,
+    estado ENUM('PENDIENTE','FINALIZADA') NOT NULL DEFAULT 'PENDIENTE'
+    FOREIGN KEY (id_paquete) REFERENCES Servicios(id_paquete),
     FOREIGN KEY (id_barbero) REFERENCES Barbero(id_Barbero),
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+    
 );
 
 CREATE TABLE  Productos(
 
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
     categoria VARCHAR(15) NOT NULL,
-    precio FLOAT NOT NULL,
+    precio FLOAT NOT NULL,|
     estado ENUM('ACTIVO','INACTIVO') NOT NULL DEFAULT 'ACTIVO'
 );
+
+CREATE TABLE Servicios(
+    id_servicio INT AUTO_INCREMENT PRIMARY KEY,
+    servicios VARCHAR(50) NOT NULL,
+    precio FLOAT NOT NULL,
+    estado ENUM('ACTIVO','INACTIVO') NOT NULL DEFAULT 'ACTIVO'
+)
 
 CREATE TABLE Ventas(
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
