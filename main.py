@@ -1,5 +1,8 @@
 from flask import Flask, redirect, request, session, render_template
 
+
+from helpers.user import *
+
 app = Flask(__name__, static_folder='static')
 
 @app.route('/', methods=['GET', 'POST'])
@@ -13,7 +16,7 @@ def index():
         return login()
     elif form_id == "signupForm":
         return register()
-    elif form_id == "citaForm":
+    elif form_id == "bookingForm":
         return new_reserv()
 
     return render_template('index.html')
@@ -28,12 +31,21 @@ def register():
     nombre = request.form.get("nombre")
     telefono = request.form.get("telefono")
     email = request.form.get("correo_electronico")
-    password = request.form.get("password")  
+    password = request.form.get("password")
+
+    new_user(nombre,telefono,email,password)
 
     return f"Nombre: {nombre}\nTeléfono: {telefono}\nCorreo electrónico: {email}\nContraseña: {password}"
 
 def new_reserv():
-    return "Función de nueva reserva"
+    nombre = request.form.get("nombre")
+    telefono = request.form.get("telefono")
+    fecha = request.form.get("fecha")
+    hora = request.form.get("hora")
+    barbero = request.form.get("barbero")
+    servicio = request.form.get("servicio")
+
+    return f"NOMBRE: {nombre} TELEFONO: {telefono} FECHA:{fecha} HOR: {hora} BARBERO: {barbero} SERVICIO: {servicio} "
 
 if __name__ == '__main__':  #
     try:
