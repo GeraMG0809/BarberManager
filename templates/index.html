@@ -354,25 +354,26 @@
               </form>
             </div>
             <div class="tab-pane fade" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
-              <form id="signupForm">
+              <form id="signupForm" action="/" method="POST"> 
+                <input type="hidden" name="form_id" value="signupForm">        
                 <div class="mb-3">
-                  <label for="signupName" class="form-label">Nombre</label>
-                  <input type="text" class="form-control" id="signupName" placeholder="Tu nombre">
+                    <label for="signupName" class="form-label">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" id="signupName" placeholder="Tu nombre">
                 </div>
                 <div class="mb-3">
-                  <label for="signupPhone" class="form-label">Teléfono</label>
-                  <input type="tel" class="form-control" id="signupPhone" placeholder="Tu teléfono">
+                    <label for="signupPhone" class="form-label">Teléfono</label>
+                    <input type="tel" name="telefono" class="form-control" id="signupPhone" placeholder="Tu teléfono">
                 </div>
                 <div class="mb-3">
-                  <label for="signupEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="signupEmail" placeholder="tu@email.com">
+                    <label for="signupEmail" class="form-label">Email</label>
+                    <input type="email" name="correo_electronico" class="form-control" id="signupEmail" placeholder="tu@email.com">
                 </div>
                 <div class="mb-3">
-                  <label for="signupPassword" class="form-label">Contraseña</label>
-                  <input type="password" class="form-control" id="signupPassword">
+                    <label for="signupPassword" class="form-label">Contraseña</label>
+                    <input type="password" name="password" class="form-control" id="signupPassword">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-              </form>
+            </form>            
             </div>
           </div>
         </div>
