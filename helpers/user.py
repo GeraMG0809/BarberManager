@@ -1,5 +1,6 @@
 from helpers.conection import *
 from models.User_model import *
+from typing import Union
     
 
 def new_user(name: str, telefono: str, email: str, password: str) -> bool: 
@@ -15,7 +16,7 @@ def new_user(name: str, telefono: str, email: str, password: str) -> bool:
     with barberManager.cursor() as cursor:
         cursor.execute(
             "INSERT INTO Usuario (nombre_usuario, telefono_usuario, correo_electronico, contraseña) VALUES (%s, %s, %s, %s)",
-            (name, telefono, email, password)  # 👈 Pasar los valores como una tupla
+            (name, telefono, email, password)  
         )
 
     barberManager.commit()  # Guardar los cambios
@@ -33,6 +34,22 @@ def select_user_id(id:int):
     barberManager.close()
     return user
 
+def select_user_email(email:str)-> Union[User,None]:
+    barberManager = Connection()
+
+    user_data = tuple
+
+    with barberManager.cursor() as cursor:
+        cursor.execute("SELECT * FROM Usuario WHERE correo_electronico = %s", (email))
+        user_data = cursor.fetchone()
+
+    barberManager.close()
+
+    if user_data:
+        user = User(user_data)
+        return user
+    else:
+        return None
 
 def select_user_all()->list:
     barberManager =Connection()
