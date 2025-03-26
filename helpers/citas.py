@@ -100,3 +100,23 @@ def modificar_cita(campo: str, modificacion:str, id_cita:int):
     barberManager.commit()
     barberManager.close()
     
+
+
+def obtener_horarios_disponibles(id_barbero: int, fecha: str):
+    if not id_barbero:  # Validar que id_barbero no esté vacío
+        raise ValueError("El ID del barbero no puede estar vacío o ser None")
+
+    barberManager = Connection()
+    horarios_disponibles = [f"{hora}:00" for hora in range(9, 20)]
+
+    try:
+        with barberManager.cursor() as cursor:
+            # Usar parámetros seguros para evitar inyección SQL
+            cursor.execute("SELECT hora_cita FROM Cita WHERE id_barbero = %s AND fecha = %s", (id_barbero, fecha))
+            horario_ocupado = [fila[0] for fila in cursor.fetchall()]
+
+        horarios_libres = [hora for hora in horarios_disponibles if hora not in horario_ocupado]
+        return horarios_libres
+
+    finally:
+        barberManager.close()  # Asegurar cierre de conexión incluso si hay error

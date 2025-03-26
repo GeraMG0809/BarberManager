@@ -16,7 +16,8 @@ CREATE TABLE Barbero(
     id_barbero INT AUTO_INCREMENT PRIMARY KEY,
     nombre_barbero VARCHAR(25) NOT NULL,
     telefono VARCHAR(12) NOT NULL,
-    imagenes VARCHAR(50) NOT NULL
+    imagenes VARCHAR(50) NOT NULL,
+    estado ENUM('ACTIVO','INACTIVO') NOT NULL DEFAULT 'ACTIVO'
 );
 
 CREATE TABLE Comentarios(

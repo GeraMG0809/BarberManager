@@ -1,5 +1,7 @@
 from flask import Flask, redirect, request, session, render_template, url_for
 from helpers.user import *
+from helpers.citas import *
+from helpers.barbero import *
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'tu_clave_secreta_segura'  
@@ -18,8 +20,35 @@ def index():
         return register()
     elif form_id == "bookingForm":
         return new_reserv()
+    
+    #horario_libre = horarios_disponibles()
 
     return render_template('index.html', user=user)
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index')) 
+
+@app.route('/horarios_disponibles')
+def horarios_disponibles():
+    print("ruta entra")
+    barbero = request.args.get("barbero")
+    fecha = request.args.get("fecha")
+
+    # Obtener el ID del barbero
+    id_barbero = select_barbero_id(barbero)
+
+    # Obtener los horarios disponibles
+    horarios = obtener_horarios_disponibles(id_barbero, fecha)
+
+    # Mostrar los horarios disponibles en consola (opcional)
+    for horario in horarios:
+        print(horario)
+    
+    # Pasar los horarios disponibles a la plantilla
+    return render_template('index.html', horarios=horarios)
+
 
 
 def login():
@@ -51,6 +80,7 @@ def register():
     new_user(nombre, telefono, email, password)
 
     return f"Nombre: {nombre}\nTeléfono: {telefono}\nCorreo electrónico: {email}\nContraseña: {password}"
+
 
 
 def new_reserv():
