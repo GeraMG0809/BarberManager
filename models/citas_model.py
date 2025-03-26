@@ -2,11 +2,11 @@
 class Cita:
 
     def __init__(self,datos:tuple)->None:
-        self.id_cita = datos[1]
-        self.id_barb = datos[2]
-        self.id_usuario = datos[3]
-        self.hora = datos[4]
-        self.fecha = datos[5]
+        self.id_cita = datos[0]
+        self.id_barb = datos[1]
+        self.id_usuario = datos[2]
+        self.hora = datos[3]
+        self.fecha = datos[4]
 
     def to_dict(self):
         return{'id_cita':self.id_cita,
