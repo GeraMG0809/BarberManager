@@ -1,0 +1,86 @@
+/* Custom Colors */
+:root {
+    --orange-50: #fff7ed;
+    --orange-100: #ffedd5;
+    --orange-200: #fed7aa;
+    --orange-300: #fdba74;
+    --orange-400: #fb923c;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+    --orange-700: #c2410c;
+    --orange-800: #9a3412;
+    --orange-900: #7c2d12;
+  
+    --brown-50: #fdf8f6;
+    --brown-100: #f2e8e5;
+    --brown-200: #eaddd7;
+    --brown-300: #e0cec7;
+    --brown-400: #d2bab0;
+    --brown-500: #bfa094;
+    --brown-600: #a18072;
+    --brown-700: #977669;
+    --brown-800: #846358;
+    --brown-900: #43302b;
+  
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --green-700: #15803d;
+  }
+  
+  /* Custom Classes */
+  .bg-orange-light {
+    background-color: var(--orange-50) !important;
+  }
+  
+  .bg-orange {
+    background-color: var(--orange-100) !important;
+  }
+  
+  .bg-brown {
+    background-color: var(--brown-800) !important;
+  }
+  
+  .text-orange {
+    color: var(--orange-600) !important;
+  }
+  
+  .text-brown {
+    color: var(--brown-800) !important;
+  }
+  
+  .border-orange {
+    border-color: var(--orange-300) !important;
+  }
+  
+  .btn-orange {
+    background-color: var(--orange-600) !important;
+    color: white !important;
+  }
+  
+  .btn-orange:hover {
+    background-color: var(--orange-700) !important;
+    color: white !important;
+  }
+  
+  /* Cursor pointer for cards */
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+  /* Transitions */
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Body background */
+  body {
+    background-color: var(--orange-50);
+    color: var(--brown-900);
+  }
+  
+  
