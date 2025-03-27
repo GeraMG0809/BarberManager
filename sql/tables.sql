@@ -53,6 +53,7 @@ CREATE TABLE  Productos(
 
 CREATE TABLE Servicios(
     id_servicio INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_servicio VARCHAR(35) NOT NULL,
     servicios VARCHAR(50) NOT NULL,
     precio FLOAT NOT NULL,
     estado ENUM('ACTIVO','INACTIVO') NOT NULL DEFAULT 'ACTIVO'
