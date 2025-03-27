@@ -122,7 +122,7 @@
                 <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Tratamientos exclusivos</li>
               </ul>
               <div class="text-center mt-4">
-                <button class="btn w-100" style="background-color: #FF8F00; color: white;">Hazte Miembro</button>
+                <button lass="btn btn-outline-light rounded-circle" data-bs-toggle="modal" data-bs-target="#loginModal" style="background-color: #FF8F00; color: white;">Hazte Miembro</button>
               </div>
             </div>
           </div>
@@ -293,12 +293,9 @@
                 </div>
                 <div class="mb-3">
                   <label for="time" class="form-label">Hora</label>
-                  <select>
+                  <select name="hora" id="time" class="form-select" required>
                     <option value="" selected disabled>Selecciona un horario</option>
-                    {% for horario in horarios %}
-                        <option value="{{ horario }}">{{ horario }}</option>
-                    {% endfor %}
-                </select>
+                </select>                
                 </div>
                 <div class="mb-3">
                   <label for="service" class="form-label">Servicio</label>

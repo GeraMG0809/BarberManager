@@ -1,22 +1,21 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("funcion entra")
+document.addEventListener("DOMContentLoaded", function() {
     const barberSelect = document.getElementById("barber");
     const dateInput = document.getElementById("date");
     const timeSelect = document.getElementById("time");
 
-    function fetchAvailableTimes() {
-        const barber = barberSelect.value;
-        const date = dateInput.value;
+    function actualizarHorarios() {
+        const barbero = barberSelect.value;
+        const fecha = dateInput.value;
 
-        if (barber && date) {
-            fetch(`/horarios_disponibles?barbero=${barber}&fecha=${date}`)
+        if (barbero && fecha) {
+            fetch(`/horarios_disponibles?barbero=${barbero}&fecha=${fecha}`)
                 .then(response => response.json())
                 .then(data => {
                     timeSelect.innerHTML = '<option value="" selected disabled>Selecciona un horario</option>';
-                    data.forEach(hora => {
+                    data.forEach(horario => {
                         const option = document.createElement("option");
-                        option.value = hora;
-                        option.textContent = hora;
+                        option.value = horario;
+                        option.textContent = horario;
                         timeSelect.appendChild(option);
                     });
                 })
@@ -24,6 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    barberSelect.addEventListener("change", fetchAvailableTimes);
-    dateInput.addEventListener("change", fetchAvailableTimes);
+    barberSelect.addEventListener("change", actualizarHorarios);
+    dateInput.addEventListener("change", actualizarHorarios);
 });

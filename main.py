@@ -1,7 +1,11 @@
-from flask import Flask, redirect, request, session, render_template, url_for
+from flask import Flask, redirect, request, session, render_template, url_for,jsonify
 from helpers.user import *
 from helpers.citas import *
 from helpers.barbero import *
+from helpers.servicios import *
+from datetime import datetime
+
+
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'tu_clave_secreta_segura'  
@@ -30,24 +34,23 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('index')) 
 
-@app.route('/horarios_disponibles')
+
+@app.route('/horarios_disponibles', methods=['GET'])
 def horarios_disponibles():
-    print("ruta entra")
     barbero = request.args.get("barbero")
     fecha = request.args.get("fecha")
 
-    # Obtener el ID del barbero
+    if not barbero or not fecha:
+        return jsonify({"error": "Faltan parámetros"}), 400
+
     id_barbero = select_barbero_id(barbero)
 
-    # Obtener los horarios disponibles
+    if id_barbero is None:
+        return jsonify({"error": "Barbero no encontrado"}), 404  # Evita consultas incorrectas
+
     horarios = obtener_horarios_disponibles(id_barbero, fecha)
 
-    # Mostrar los horarios disponibles en consola (opcional)
-    for horario in horarios:
-        print(horario)
-    
-    # Pasar los horarios disponibles a la plantilla
-    return render_template('index.html', horarios=horarios)
+    return jsonify(horarios)
 
 
 
@@ -90,6 +93,16 @@ def new_reserv():
     hora = request.form.get("hora")
     barbero = request.form.get("barbero")
     servicio = request.form.get("servicio")
+
+    
+
+    user_id = session.get('user')['id']
+    barber_id = select_barbero_id(barbero)
+    format_fecha = datetime.strptime(fecha,"%y-%m-%d").strftime("%d/5m/%y")
+    id_servicio = get_servicio_id(servicio)
+
+    #new_cita(barber_id,user_id,format_fecha,hora,id_servicio)   
+
 
     return f"NOMBRE: {nombre} TELEFONO: {telefono} FECHA:{fecha} HORA: {hora} BARBERO: {barbero} SERVICIO: {servicio} "
 

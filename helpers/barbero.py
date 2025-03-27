@@ -10,15 +10,15 @@ def select_barbero(name:str):
     barberManager.close()
     return barber
 
-def select_barbero_id(name:str):
+def select_barbero_id(nombre_barbero):
     barberManager = Connection()
-    
     with barberManager.cursor() as cursor:
-        cursor.execute("SELECT id_barbero FROM Barbero WHERE nombre_barbero = %s", (name,))
-        barber = cursor.fetchone()
-
+        cursor.execute("SELECT id_barbero FROM Barbero WHERE nombre_barbero = %s", (nombre_barbero,))
+        resultado = cursor.fetchone()
     barberManager.close()
-    return barber
+    
+    return resultado[0] if resultado else None
+
 
 def select_barbers():
     barberManager = Connection()
