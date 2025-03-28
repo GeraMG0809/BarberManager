@@ -62,4 +62,18 @@ def select_user_all()->list:
     barberManager.close()
     return users
 
+def modify_user(user_id, nombre, telefono) -> bool:
+    barberManager = Connection()
 
+    try:
+        with barberManager.cursor() as cursor:
+            sql = "UPDATE Usuario SET nombre_usuario = %s, telefono_usuario = %s WHERE id_usuario = %s"
+            cursor.execute(sql, (nombre, telefono, user_id))
+
+        barberManager.commit()
+        return True
+    except Exception as e:
+        print("Error al modificar usuario:", e)
+        return False
+    finally:
+        barberManager.close()
