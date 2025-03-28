@@ -24,3 +24,19 @@ def get_servicios():
     barberManager.close()
 
     return servicios
+
+def modify_servicio(campo:str,valor)->bool:
+    barberManager = Connection()
+
+    columnas = ["nombre_servicios","servicios","precio"]
+
+    if campo not in columnas:
+        return False
+
+    with barberManager.cursor() as cursor:
+        sql =f"UPDATE Servicios SET {campo} = %s"
+        cursor.execute(sql,(valor,))
+    
+    barberManager.commit()
+    barberManager.close()
+    return True
