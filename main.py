@@ -23,6 +23,8 @@ def index():
         return register()
     elif form_id == "bookingForm":
         return new_reserv()
+    elif form_id == "editUserForm":
+        return edit_user()
 
     return render_template('index.html', user=user)
 
@@ -118,6 +120,25 @@ def new_reserv():
                 "user_id": user_id
             }
         }), 200
+
+def edit_user():
+    nombre = request.form.get("nombre")
+    telefono = request.form.get("telefono")
+
+    user = session.get('user')
+    user_id = user.get('id')
+    modify_user(user_id,nombre,telefono)
+
+    return jsonify({
+        "status":"succes",
+        "message":"Modificacion de datos correcta",
+        "datos": {
+            "user_id":user_id,
+            "nombre":nombre,
+            "telefono":telefono
+        }
+    }),2000
+
 
 if __name__ == '__main__':
     try:
