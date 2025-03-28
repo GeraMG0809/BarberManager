@@ -94,18 +94,34 @@ def new_reserv():
     barbero = request.form.get("barbero")
     servicio = request.form.get("servicio")
 
-    
+    # Validar si hay sesión iniciada
+    user = session.get('user')
+    if not user:
+        return jsonify({
+            "error": "Usuario no autenticado",
+            "status": 401
+        }), 401  # Código de error HTTP 401 (No autorizado)
 
-    user_id = session.get('user')['id']
+    user_id = user.get('id')
     barber_id = select_barbero_id(barbero)
-    format_fecha = datetime.strptime(fecha,"%y-%m-%d").strftime("%d/5m/%y")
+
+    # Corregir formato de la fecha
     id_servicio = get_servicio_id(servicio)
 
-    #new_cita(barber_id,user_id,format_fecha,hora,id_servicio)   
-
-
-    return f"NOMBRE: {nombre} TELEFONO: {telefono} FECHA:{fecha} HORA: {hora} BARBERO: {barbero} SERVICIO: {servicio} "
-
+    new_cita(barber_id,user_id,fecha,hora,id_servicio)   
+    return jsonify({
+            "status": "success",
+            "message": "Reserva creada correctamente",
+            "reserva": {
+                "nombre": nombre,
+                "telefono": telefono,
+                "fecha": fecha,
+                "hora": hora,
+                "barbero": barber_id,
+                "servicio": id_servicio,
+                "user_id": user_id
+            }
+        }), 200
 
 if __name__ == '__main__':
     try:

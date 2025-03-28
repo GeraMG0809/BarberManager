@@ -7,7 +7,8 @@ def new_cita(id_barb:int,id_usuario:int,fecha:str,hora:str,id_paquete:int):
     barberManager = Connection()
 
     with barberManager.cursor() as cursor:
-        cursor.execute("INSERT INTO Cita(id_barbero,id_usuario,id_paquete,hora_cita,fecha) VALUES (%s,%s,%s,%s,%s)",{id_barb},{id_usuario},{id_paquete},{hora},{fecha})
+        cursor.execute("INSERT INTO Cita(id_barbero, id_usuario, id_servicio, hora_cita, fecha) VALUES (%s, %s, %s, %s, %s)", 
+               (id_barb, id_usuario, id_paquete, hora, fecha))
 
     barberManager.commit()
     barberManager.close()
