@@ -42,14 +42,29 @@
            {% if user %}
            <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
+               aria-expanded="false">
+                <i class="bi bi-person"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> {{ user.user }}</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-user"></i>Cerrar sesion</a></li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-person"></i> Modificar perfil
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="">
+                      <i class="bi bi-calendar-event"></i> Citas
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('logout') }}">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </a>
+                </li>
+                
             </ul>
-
-           </li>
+        </li>
+        
            {% else %}
           <button class="btn btn-outline-light rounded-circle" data-bs-toggle="modal" data-bs-target="#loginModal">
             <i class="bi bi-person"></i>

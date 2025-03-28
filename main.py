@@ -3,7 +3,6 @@ from helpers.user import *
 from helpers.citas import *
 from helpers.barbero import *
 from helpers.servicios import *
-from datetime import datetime
 
 
 
@@ -24,8 +23,6 @@ def index():
         return register()
     elif form_id == "bookingForm":
         return new_reserv()
-    
-    #horario_libre = horarios_disponibles()
 
     return render_template('index.html', user=user)
 
@@ -51,7 +48,6 @@ def horarios_disponibles():
     horarios = obtener_horarios_disponibles(id_barbero, fecha)
 
     return jsonify(horarios)
-
 
 
 def login():
