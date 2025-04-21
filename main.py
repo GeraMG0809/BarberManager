@@ -15,18 +15,66 @@ def index():
     form_id = None
 
     if request.method == "POST":
-        form_id = request.form.get("form_id")  
-        
-    if form_id == "loginForm":
-        return login()
-    elif form_id == "signupForm":
-        return register()
-    elif form_id == "bookingForm":
-        return new_reserv()
-    elif form_id == "editUserForm":
-        return edit_user()
+        form_id = request.form.get("form_id")        
+        if form_id == "loginForm":
+            return login()
+        elif form_id == "signupForm":
+            return register()
+        elif form_id == "bookingForm":
+            return new_reserv()
+        elif form_id == "editUserForm":
+            return edit_user()
 
     return render_template('index.html', user=user)
+
+
+#Ruta  de inicio de seesion
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get("email")
+        password = request.form.get("password", "").strip()
+
+        error = None
+
+        if not email or not password:
+            error = 'Todos los campos son obligatorios'
+            return render_template('index.html', error=error, show_login_modal=True)
+
+        user = select_user_email(email)
+
+        if user:
+            stored_password = str(user.password).strip()
+            if stored_password == password:
+                session['user'] = user.to_dict()
+                return redirect('/')
+            else:
+                error = 'Correo electrónico o contraseña inválidos'
+        else:
+            error = 'Usuario no encontrado'
+
+        print("Error:", error)
+
+        return render_template('index.html', error=error, show_login_modal=True)
+
+    return render_template('index.html')
+
+
+#Funcion de registro de usuarios
+def register():
+    nombre = request.form.get("nombre")
+    telefono = request.form.get("telefono")
+    email = request.form.get("correo_electronico")
+    password = request.form.get("password")
+
+    if select_user_email(email):
+        print("Usuario ya registrado")
+    else:
+        new_user(nombre, telefono, email, password)
+
+
+    return f"Nombre: {nombre}\nTeléfono: {telefono}\nCorreo electrónico: {email}\nContraseña: {password}"
+
 
 @app.route('/logout')
 def logout():
@@ -50,38 +98,6 @@ def horarios_disponibles():
     horarios = obtener_horarios_disponibles(id_barbero, fecha)
 
     return jsonify(horarios)
-
-
-def login():
-    email = request.form.get("email")
-    password = request.form.get("password").strip()  
-
-    error = None
-    user = select_user_email(email)  # Función que obtiene el usuario de la base de datos
-
-    if user:
-        stored_password = str(user.password).strip()  
-        if stored_password == password:
-            session['user'] = user.to_dict()  
-            return redirect('/') 
-        else:
-            error = 'Correo electrónico o contraseña inválidos'
-    else:
-        error = 'Usuario no encontrado'
-
-    return render_template('index.html', error=error)
-
-
-def register():
-    nombre = request.form.get("nombre")
-    telefono = request.form.get("telefono")
-    email = request.form.get("correo_electronico")
-    password = request.form.get("password")
-
-    new_user(nombre, telefono, email, password)
-
-    return f"Nombre: {nombre}\nTeléfono: {telefono}\nCorreo electrónico: {email}\nContraseña: {password}"
-
 
 
 def new_reserv():

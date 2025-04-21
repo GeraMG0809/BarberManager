@@ -83,7 +83,7 @@
   </section>
 
   <!-- Packages Section -->
-  <section id="paquetes" class="py-5">
+  <section id="paquetes" class="py-5" data-aos="fade-up">
     <div class="container">
       <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Nuestros Paquetes</h2>
       <div class="row g-4">
@@ -119,7 +119,7 @@
   </section>
 
   <!-- Benefits Section -->
-  <section id="beneficios" class="py-5" style="background-color: #f2e8e5;">
+  <section id="beneficios" class="py-5" style="background-color: #f2e8e5;" data-aos="fade-right">
     <div class="container">
       <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Beneficios de Elegirnos</h2>
       <div class="row g-4">
@@ -372,19 +372,27 @@
           </ul>
           <div class="tab-content pt-3" id="authTabsContent">
             <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
-              <form id="loginForm" method="POST">
+              <form id="loginForm" method="POST" action="/">
                 <input type="hidden" name="form_id" value="loginForm">
+  
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+                {% endif %}
+  
                 <div class="mb-3">
                   <label for="loginEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" name="email" placeholder="tu@email.com">
+                  <input type="email" class="form-control" name="email" placeholder="tu@email.com" required>
                 </div>
                 <div class="mb-3">
                   <label for="loginPassword" class="form-label">Contraseña</label>
-                  <input type="password" class="form-control" name="password">
+                  <input type="password" class="form-control" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
               </form>
             </div>
+  
             <div class="tab-pane fade" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
               <form id="signupForm" action="/" method="POST"> 
                 <input type="hidden" name="form_id" value="signupForm">        
@@ -405,14 +413,14 @@
                     <input type="password" name="password" class="form-control" id="signupPassword" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-            </form>            
+              </form>            
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
+  
   <!-- Barber Modals -->
   <!-- Barber Modal 1 -->
   <div class="modal fade" id="barberModal1" tabindex="-1" aria-hidden="true">
@@ -490,8 +498,12 @@
         </div>
     </div>
   </div>
-
-
+  {% if error %}
+  <script>
+    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+  </script>
+  {% endif %}
   <!-- Bootstrap JS Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Custom JS -->
