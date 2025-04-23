@@ -1,4 +1,5 @@
 from helpers.conection import * 
+from models.barbero_model import *
 
 def select_barbero(name:str):
     barberManager = Connection()
@@ -27,6 +28,11 @@ def select_barbers():
     with barberManager.cursor() as cursor:
         cursor.execute("SELECT * FROM Barbero WHERE estado = 'ACTIVO'")
         barberos = cursor.fetchall()
+    
+
+    barbero : list = []
+    for barb in barberos:
+        barbero.append(Barbero(barb).to_dict())
 
     barberManager.close()
     return barberos

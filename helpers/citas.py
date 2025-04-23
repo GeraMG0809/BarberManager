@@ -20,10 +20,14 @@ def select_citas_pendientes():
     citas_pendientes = []
     with barberManager.cursor() as cursor:
         cursor.execute("SELECT * FROM Cita WHERE estado = 'PENDIENTE'")
-        citas_pendientes.fetchall()
+        citas_pendientes = cursor.fetchall()
     
+    citas  : list = []
+    for cita in citas_pendientes: 
+        citas.append(Cita(cita).to_dict())
+
     barberManager.close()
-    return citas_pendientes
+    return citas
 
 
 def select_citas_finalizadas():

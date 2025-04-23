@@ -10,7 +10,7 @@ class Barbero:
     
     def to_dict(self):
         return{'id_barbero':self.id_barbero,
-               'nombre_cliente':self.nombre_barbero,
+               'nombre_barbero':self.nombre_barbero,
                'telefono':self.telefono,
                'imagenes':self.imagenes}
 
