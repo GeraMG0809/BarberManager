@@ -24,15 +24,13 @@ def select_barbero_id(nombre_barbero):
 def select_barbers():
     barberManager = Connection()
 
-    barberos = list
+    barberos = []
     with barberManager.cursor() as cursor:
         cursor.execute("SELECT * FROM Barbero WHERE estado = 'ACTIVO'")
-        barberos = cursor.fetchall()
-    
+        resultados = cursor.fetchall()
 
-    barbero : list = []
-    for barb in barberos:
-        barbero.append(Barbero(barb).to_dict())
+        for barb in resultados:
+            barberos.append(Barbero(barb).to_dict())
 
     barberManager.close()
     return barberos
