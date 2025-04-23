@@ -16,18 +16,34 @@ def new_cita(id_barb:int,id_usuario:int,fecha:str,hora:str,id_paquete:int):
 
 def select_citas_pendientes():
     barberManager = Connection()
+    citas = []
 
-    citas_pendientes = []
     with barberManager.cursor() as cursor:
-        cursor.execute("SELECT * FROM Cita WHERE estado = 'PENDIENTE'")
-        citas_pendientes = cursor.fetchall()
-    
-    citas  : list = []
-    for cita in citas_pendientes: 
-        citas.append(Cita(cita).to_dict())
+        cursor.execute("""
+            SELECT 
+                C.id_cita,
+                U.nombre_usuario,
+                B.nombre_barbero,
+                S.nombre_servicio,
+                C.fecha,
+                C.hora_cita,
+                C.estado
+            FROM Cita C
+            JOIN Usuario U ON C.id_usuario = U.id_usuario
+            JOIN Barbero B ON C.id_barbero = B.id_barbero
+            JOIN Servicios S ON C.id_servicio = S.id_servicio
+            WHERE C.estado = 'PENDIENTE'
+        """)
+        resultados = cursor.fetchall()
+
+        for fila in resultados:
+            cita = Cita(fila)
+            citas.append(cita.to_dict())
 
     barberManager.close()
     return citas
+
+
 
 
 def select_citas_finalizadas():
