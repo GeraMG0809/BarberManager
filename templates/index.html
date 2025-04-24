@@ -300,9 +300,9 @@
                   <label for="barber" class="form-label">Barbero</label>
                   <select class="form-select" name="barbero" id="barber" required>
                     <option value="" selected disabled>Selecciona un barbero</option>
-                    <option value="Juan Perez">Juan Perez</option>
-                    <option value="carlos">Carlos Rodríguez</option>
-                    <option value="miguel">Miguel González</option>
+                    {% for barbero in barberos %}
+                      <option value="{{ barbero.nombre }}">{{ barbero.nombre }}</option>
+                    {% endfor %}
                   </select>
                 </div>
                 <div class="mb-3">
