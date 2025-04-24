@@ -15,6 +15,7 @@ app.secret_key = 'tu_clave_secreta_segura'
 def index():
     user = session.get('user')
     form_id = None
+    barberos = select_barbers()
 
     if request.method == "POST":
         form_id = request.form.get("form_id")        
@@ -27,7 +28,7 @@ def index():
         elif form_id == "editUserForm":
             return edit_user()
 
-    return render_template('index.html', user=user)
+    return render_template('index.html', user=user,barberos = barberos)
 
 @app.route('/admin')
 def admin():

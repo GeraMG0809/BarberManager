@@ -210,36 +210,21 @@
     <div class="container">
       <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Nuestros Barberos</h2>
       <div class="row g-4">
+        {% for barbero in barberos %}
         <div class="col-md-4">
           <div class="card h-100 cursor-pointer" style="background-color: #fff7ed; border-color: #fdba74;" data-bs-toggle="modal" data-bs-target="#barberModal1">
-            <img src="https://via.placeholder.com/300" class="card-img-top rounded-circle p-3" alt="Juan Pérez">
+            <img src="{{ url_for('static', filename='imges/' ~ barbero.imagenes) }}" class="card-img-top rounded-circle p-3" alt="{{ barbero.nombre }}">
             <div class="card-body text-center">
-              <h3 class="card-title" style="color: #26355D;">Juan Pérez</h3>
+              <h3 class="card-title" style="color: #26355D;">{{ barbero.nombre }}</h3>
               <p class="card-text text-muted">Cortes clásicos</p>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="card h-100 cursor-pointer" style="background-color: #fff7ed; border-color: #fdba74;" data-bs-toggle="modal" data-bs-target="#barberModal2">
-            <img src="https://via.placeholder.com/300" class="card-img-top rounded-circle p-3" alt="Carlos Rodríguez">
-            <div class="card-body text-center">
-              <h3 class="card-title" style="color: #26355D;">Carlos Rodríguez</h3>
-              <p class="card-text text-muted">Barbas y afeitados</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 cursor-pointer" style="background-color: #fff7ed; border-color: #fdba74;" data-bs-toggle="modal" data-bs-target="#barberModal3">
-            <img src="https://via.placeholder.com/300" class="card-img-top rounded-circle p-3" alt="Miguel González">
-            <div class="card-body text-center">
-              <h3 class="card-title" style="color: #26355D;">Miguel González</h3>
-              <p class="card-text text-muted">Estilos modernos</p>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
+  
 
   <!-- Testimonials Section -->
   <section id="testimonios" class="py-5">
