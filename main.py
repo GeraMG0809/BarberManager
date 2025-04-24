@@ -16,6 +16,7 @@ def index():
     user = session.get('user')
     form_id = None
     barberos = select_barbers()
+    paquetes = get_servicios()
 
     if request.method == "POST":
         form_id = request.form.get("form_id")        
@@ -28,7 +29,7 @@ def index():
         elif form_id == "editUserForm":
             return edit_user()
 
-    return render_template('index.html', user=user,barberos = barberos)
+    return render_template('index.html', user=user,barberos = barberos,paquetes = paquetes)
 
 @app.route('/admin')
 def admin():
