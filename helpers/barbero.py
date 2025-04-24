@@ -1,5 +1,6 @@
 from helpers.conection import * 
 from models.barbero_model import *
+from mysql.connector import Error
 
 def select_barbero(name:str):
     barberManager = Connection()
@@ -35,3 +36,15 @@ def select_barbers():
     barberManager.close()
     return barberos
 
+
+def insert_barbero(nombre, telefono, nombre_imagen):
+    conexion = Connection()
+    
+    try:
+        with conexion.cursor() as cursor:
+            sql = "INSERT INTO Barbero (nombre_barbero, telefono, imagenes) VALUES (%s, %s, %s)"
+            valores = (nombre, telefono, nombre_imagen)
+            cursor.execute(sql, valores)
+            conexion.commit()
+    finally:
+        conexion.close()

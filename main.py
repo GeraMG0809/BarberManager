@@ -1,8 +1,10 @@
 from flask import Flask, redirect, request, session, render_template, url_for,jsonify,flash
+from werkzeug.utils import secure_filename
 from helpers.user import *
 from helpers.citas import *
 from helpers.barbero import *
 from helpers.servicios import *
+import os
 
 
 
@@ -34,6 +36,26 @@ def admin():
     barberos = select_barbers()
     return render_template('AdminManager.html', citas = citas, barberos = barberos)
 
+
+@app.route('/agregar_barbero', methods=['POST'])
+def agregar_barbero():
+    nombre = request.form['nombre']
+    telefono = request.form['telefono']
+    imagen = request.files['imagen']
+    
+    if imagen:
+        filename = secure_filename(imagen.filename)
+        ruta_imagen = os.path.join('static', 'imges', filename)
+        
+        # Crear carpeta si no existe
+        os.makedirs(os.path.dirname(ruta_imagen), exist_ok=True)
+        
+        imagen.save(ruta_imagen)
+
+        # Insertar en base de datos
+        insert_barbero(nombre, telefono, filename)  # solo guardamos el nombre del archivo
+
+    return redirect(url_for('admin'))
 
 #Ruta  de inicio de seesion
 @app.route('/login', methods=['GET', 'POST'])

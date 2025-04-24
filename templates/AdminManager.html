@@ -77,6 +77,12 @@
     <!-- Barberos -->
     <div class="section" id="barberos">
       <h2>Barberos</h2>
+      <!-- Botón para abrir el modal -->
+        <div class="mb-3">
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarBarbero">
+            Agregar Barbero
+          </button>
+        </div>
       <div class="row">
         {% for barbero in barberos %}
         <div class="col-md-4">
@@ -94,6 +100,39 @@
         {% endfor %}
       </div>
     </div>
+
+      <!-- Modal para agregar barbero -->
+  <div class="modal fade" id="modalAgregarBarbero" tabindex="-1" aria-labelledby="modalAgregarBarberoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="POST" action="{{ url_for('agregar_barbero') }}" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalAgregarBarberoLabel">Nuevo Barbero</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="nombreBarbero" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombreBarbero" name="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="telefonoBarbero" class="form-label">Teléfono</label>
+              <input type="tel" class="form-control" id="telefonoBarbero" name="telefono" required>
+            </div>
+            <div class="mb-3">
+              <label for="imagenBarbero" class="form-label">Imagen</label>
+              <input type="file" class="form-control" id="imagenBarbero" name="imagen" accept="image/*" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
     <!-- Productos -->
     <div class="section" id="productos">
