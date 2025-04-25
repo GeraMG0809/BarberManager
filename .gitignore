@@ -1,0 +1,27 @@
+# .gitignore
+
+# Ocultar el archivo de credenciales
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Entornos virtuales
+env/
+venv/
+ENV/
+VENV/
+.venv/
+
+# Archivos de base de datos SQLite
+*.sqlite3
+
+# Archivos de configuración del editor
+.vscode/
+.idea/
