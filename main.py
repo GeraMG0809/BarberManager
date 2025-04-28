@@ -36,7 +36,7 @@ def admin():
 
     citas = select_citas_pendientes()
     barberos = select_barbers()
-    return render_template('AdminManager.html', citas = citas, barberos = barberos)
+    return render_template('AdminManager.html', citas = citas,barberos=barberos)
 
 
 @app.route('/agregar_barbero', methods=['POST'])
@@ -57,7 +57,8 @@ def agregar_barbero():
         # Insertar en base de datos
         insert_barbero(nombre, telefono, filename)  # solo guardamos el nombre del archivo
 
-    return redirect(url_for('admin'))
+    return redirect(url_for('barber'))
+
 
 #Ruta  de inicio de seesion
 @app.route('/login', methods=['GET', 'POST'])
@@ -91,7 +92,18 @@ def login():
     return render_template('index.html')
 
 
+@app.route('/barber', methods= ['GET','POST'])
+def barber():
 
+    barberos = select_barbers()
+
+    return render_template('barberPage.html', barberos = barberos)
+
+
+@app.route('/productos',methods = ['GET','POST'])
+def productos():
+
+    return render_template('/productos.html')
 
 #Funcion de registro de usuarios
 def register():
