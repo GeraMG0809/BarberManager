@@ -5,9 +5,10 @@ class Cita:
         self.cliente = datos[1]
         self.barbero = datos[2]
         self.servicio = datos[3]
-        self.fecha = datos[4]
-        self.hora = datos[5]
-        self.estado = datos[6]
+        self.precio = datos[4]
+        self.fecha = datos[5]
+        self.hora = datos[6]
+        self.estado = datos[7]
 
     def to_dict(self):
         return {
@@ -15,6 +16,7 @@ class Cita:
             'cliente': self.cliente,
             'barbero': self.barbero,
             'servicio': self.servicio,
+            'precio': self.precio,
             'fecha': self.fecha,
             'hora': self.hora,
             'estado': self.estado
@@ -27,6 +29,7 @@ class Cita:
             data['cliente'],
             data['barbero'],
             data['servicio'],
+            data['precio'],
             data['fecha'],
             data['hora'],
             data['estado']

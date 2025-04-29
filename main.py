@@ -11,6 +11,12 @@ import os
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'tu_clave_secreta_segura'  
 
+#-------------------------------------------------------#
+#--------------Rutas de pagina de barberia--------------#
+#-------------------------------------------------------#
+
+
+#Ruta principal del index 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     user = session.get('user')
@@ -30,34 +36,6 @@ def index():
             return edit_user()
 
     return render_template('index.html', user=user,barberos = barberos,paquetes = paquetes)
-
-@app.route('/admin')
-def admin():
-
-    citas = select_citas_pendientes()
-    barberos = select_barbers()
-    return render_template('AdminManager.html', citas = citas,barberos=barberos)
-
-
-@app.route('/agregar_barbero', methods=['POST'])
-def agregar_barbero():
-    nombre = request.form['nombre']
-    telefono = request.form['telefono']
-    imagen = request.files['imagen']
-    
-    if imagen:
-        filename = secure_filename(imagen.filename)
-        ruta_imagen = os.path.join('static', 'imges', filename)
-        
-        # Crear carpeta si no existe
-        os.makedirs(os.path.dirname(ruta_imagen), exist_ok=True)
-        
-        imagen.save(ruta_imagen)
-
-        # Insertar en base de datos
-        insert_barbero(nombre, telefono, filename)  # solo guardamos el nombre del archivo
-
-    return redirect(url_for('barber'))
 
 
 #Ruta  de inicio de seesion
@@ -91,19 +69,33 @@ def login():
 
     return render_template('index.html')
 
-
-@app.route('/barber', methods= ['GET','POST'])
-def barber():
-
-    barberos = select_barbers()
-
-    return render_template('barberPage.html', barberos = barberos)
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index')) 
 
 
-@app.route('/productos',methods = ['GET','POST'])
-def productos():
+@app.route('/horarios_disponibles', methods=['GET'])
+def horarios_disponibles():
+    barbero = request.args.get("barbero")
+    fecha = request.args.get("fecha")
 
-    return render_template('/productos.html')
+    if not barbero or not fecha:
+        return jsonify({"error": "Faltan parámetros"}), 400
+
+    id_barbero = select_barbero_id(barbero)
+
+    if id_barbero is None:
+        return jsonify({"error": "Barbero no encontrado"}), 404  # Evita consultas incorrectas
+
+    horarios = obtener_horarios_disponibles(id_barbero, fecha)
+
+    return jsonify(horarios)
+
+
+#-------------------------------------------------------#
+#-----------------Funciones de barberia-----------------#
+#-------------------------------------------------------#
 
 #Funcion de registro de usuarios
 def register():
@@ -135,30 +127,8 @@ def register():
     flash("Registro exitoso. ¡Bienvenido!", "success")
     return redirect('/index')  # O render_template('index.html')
 
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    return redirect(url_for('index')) 
 
-
-@app.route('/horarios_disponibles', methods=['GET'])
-def horarios_disponibles():
-    barbero = request.args.get("barbero")
-    fecha = request.args.get("fecha")
-
-    if not barbero or not fecha:
-        return jsonify({"error": "Faltan parámetros"}), 400
-
-    id_barbero = select_barbero_id(barbero)
-
-    if id_barbero is None:
-        return jsonify({"error": "Barbero no encontrado"}), 404  # Evita consultas incorrectas
-
-    horarios = obtener_horarios_disponibles(id_barbero, fecha)
-
-    return jsonify(horarios)
-
-
+#Funcion de reservacion nueva
 def new_reserv():
     nombre = request.form.get("nombre")
     telefono = request.form.get("telefono")
@@ -182,7 +152,7 @@ def new_reserv():
 
     return redirect(url_for('index'))
 
-
+#Funcion para editar valores de usuario
 def edit_user():
     nombre = request.form.get("nombre")
     telefono = request.form.get("telefono")
@@ -200,6 +170,81 @@ def edit_user():
             "telefono":telefono
         }
     }),2000
+
+
+
+
+#-------------------------------------------------------#
+#----------------Rutas de administrador-----------------#
+#-------------------------------------------------------#
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    usuario_correcto = 'admin'
+    contraseña_correcta = 'admin27'
+
+    if request.method == 'POST':
+        user = request.form.get("usuario")
+        password = request.form.get("contraseña", "").strip()
+
+        if user == usuario_correcto and password == contraseña_correcta:
+            session['admin'] = True  # Marcar al usuario como autenticado
+            return redirect(url_for('adminManager'))
+        else:
+            flash('Usuario o contraseña incorrectos', 'error')
+            return redirect(url_for('admin'))
+
+    return render_template('loginAdmin.html')       
+
+#Funcion principal del administrador 
+@app.route('/adminManager')
+def adminManager():
+    if not session.get('admin'):
+        return redirect(url_for('adminLogin'))
+
+    citas = select_citas_pendientes()
+    barberos = select_barbers()
+    return render_template('AdminManager.html', citas=citas, barberos=barberos)
+
+@app.route('/barber', methods= ['GET','POST'])
+def barber():
+
+    barberos = select_barbers()
+
+    return render_template('barberPage.html', barberos = barberos)
+
+
+@app.route('/productos',methods = ['GET','POST'])
+def productos():
+
+    return render_template('/productos.html')
+
+
+@app.route('/agregar_barbero', methods=['POST'])
+def agregar_barbero():
+    nombre = request.form['nombre']
+    telefono = request.form['telefono']
+    imagen = request.files['imagen']
+    
+    if imagen:
+        filename = secure_filename(imagen.filename)
+        ruta_imagen = os.path.join('static', 'imges', filename)
+        
+        # Crear carpeta si no existe
+        os.makedirs(os.path.dirname(ruta_imagen), exist_ok=True)
+        
+        imagen.save(ruta_imagen)
+
+        # Insertar en base de datos
+        insert_barbero(nombre, telefono, filename)  # solo guardamos el nombre del archivo
+
+    return redirect(url_for('barber'))
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

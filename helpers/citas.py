@@ -25,6 +25,7 @@ def select_citas_pendientes():
                 U.nombre_usuario,
                 B.nombre_barbero,
                 S.nombre_servicio,
+                S.precio,
                 C.fecha,
                 C.hora_cita,
                 C.estado
