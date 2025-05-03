@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: barber-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: barberManager
+      MYSQL_ROOT_PASSWORD: gerardojr0809  # Contraseña del usuario root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  web:
+    build: .
+    container_name: barber-app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: main.py
+    command: flask run --host=0.0.0.0 --port=5000
+
+volumes:
+  db_data:

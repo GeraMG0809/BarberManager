@@ -1,0 +1,129 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #255255;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.header-img {
+  max-height: 200px;
+  margin-bottom: 1rem;
+}
+
+nav {
+  background-color: #eee;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #222;
+}
+
+.container {
+  padding: 1rem;
+}
+
+.section {
+  display: none;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: calc(33% - 1rem);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h5 {
+  margin: 0 0 0.5rem 0;
+}
+
+.card p {
+  margin: 0.2rem 0;
+}
+
+.estado-text {
+  font-weight: bold;
+}
+
+.text-success {
+  color: green;
+}
+
+.text-warning {
+  color: orange;
+}
+
+.text-danger {
+  color: red;
+}
+
+.text-primary {
+  color: blue;
+}
+
+.lista-reportes {
+  list-style: none;
+  padding-left: 0;
+}
+
+aside {
+  position: absolute;
+  right: 0;
+  top: calc(100px + 1rem);  /* Ajustamos para que comience después del nav */
+  width: 300px;
+  bottom: 0;
+  overflow-y: auto;
+  background-color: #fafafa;
+  padding: 1rem;
+  border-left: 1px solid #ccc;
+}
+
+aside h4 {
+  text-align: center;
+}
+
+.en-curso-card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
