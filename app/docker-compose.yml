@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: barberManager
-      MYSQL_ROOT_PASSWORD: gerardojr0809  # Contraseña del usuario root
+      MYSQL_ROOT_PASSWORD: Gerardojr0809+  # Contraseña del usuario root
     ports:
       - "3307:3306"
     volumes:
