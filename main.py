@@ -200,12 +200,11 @@ def admin():
 @app.route('/adminManager')
 def adminManager():
     if not session.get('admin'):
-        return redirect(url_for('admin'))  # Cambiar a 'admin' en lugar de 'adminLogin'
+        return redirect(url_for('adminLogin'))
 
     citas = select_citas_pendientes()
     barberos = select_barbers()
     return render_template('AdminManager.html', citas=citas, barberos=barberos)
-
 
 @app.route('/barber', methods= ['GET','POST'])
 def barber():

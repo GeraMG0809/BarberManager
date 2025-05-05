@@ -139,6 +139,15 @@
               <option value="tarjeta">Tarjeta</option>
             </select>
           </div>
+          <div class="mb-3">
+            <label for="producto" class="form-label">Producto</label>
+            <select class="form-select" id="producto" name="producto">
+              {% for producto in productos %}
+                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary">Confirmar</button>
