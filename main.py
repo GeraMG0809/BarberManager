@@ -4,6 +4,7 @@ from helpers.user import *
 from helpers.citas import *
 from helpers.barbero import *
 from helpers.servicios import *
+from helpers.producto import *
 import os
 
 
@@ -23,6 +24,8 @@ def index():
     form_id = None
     barberos = select_barbers()
     paquetes = get_servicios()
+    productos = select_productos()
+
 
     if request.method == "POST":
         form_id = request.form.get("form_id")        
@@ -35,7 +38,11 @@ def index():
         elif form_id == "editUserForm":
             return edit_user()
 
-    return render_template('index.html', user=user,barberos = barberos,paquetes = paquetes)
+    return render_template('index.html', 
+                           user=user,
+                           barberos = barberos,
+                           paquetes = paquetes,
+                           productos = productos)
 
 
 #Ruta  de inicio de seesion
@@ -112,20 +119,21 @@ def register():
     # Verificar si el usuario ya existe
     if select_user_email(email):
         flash("Este correo ya está registrado. Intenta con otro.", "danger")
-        return redirect('/registro')
+        return redirect(url_for('index'))     
     
     # Registrar nuevo usuario
     new_user(nombre, telefono, email, password)
 
     # Obtener el usuario recién creado (puedes usar select_user_email)
     user = select_user_email(email)
+    user_dict = user.to_dict()
 
     # Iniciar sesión
-    session['user_id'] = user['id']  # Asegúrate de que 'id' esté en la consulta
-    session['user_name'] = user['nombre']
+    session['user_id'] = user_dict['id']  # Asegúrate de que 'id' esté en la consulta
+    session['user_name'] = user_dict['name']
 
     flash("Registro exitoso. ¡Bienvenido!", "success")
-    return redirect('/index')  # O render_template('index.html')
+    return redirect(url_for('index'))   # O render_template('index.html')
 
 
 #Funcion de reservacion nueva
@@ -204,7 +212,9 @@ def adminManager():
 
     citas = select_citas_pendientes()
     barberos = select_barbers()
-    return render_template('AdminManager.html', citas=citas, barberos=barberos)
+    productos = select_productos()
+
+    return render_template('AdminManager.html', citas=citas, barberos=barberos,productos = productos)
 
 @app.route('/barber', methods= ['GET','POST'])
 def barber():
@@ -217,7 +227,8 @@ def barber():
 @app.route('/productos',methods = ['GET','POST'])
 def productos():
 
-    return render_template('/productos.html')
+    productos = select_productos()
+    return render_template('/productos.html', productos = productos)
 
 
 @app.route('/agregar_barbero', methods=['POST'])
@@ -241,7 +252,26 @@ def agregar_barbero():
     return redirect(url_for('barber'))
 
 
+@app.route('/precio_producto', methods=['GET'])
+def obtener_precio_producto():
+    producto_id = request.args.get('id', type=int)
+    monto_servicio = request.args.get('monto', type=float)
 
+    # Suponemos que el nombre del producto es lo que se envía en el 'id'
+    producto_nombre = request.args.get('nombre_producto', type=str)
+    
+    # Consulta el precio del producto usando la función de tu CRUD
+    precio_producto = select_producto_precio(producto_nombre)
+    
+    if precio_producto is None:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+    
+    # Calcula el monto final
+    monto_final = monto_servicio + precio_producto
+    return jsonify({
+        'precio_producto': precio_producto,
+        'monto_final': round(monto_final, 2)
+    })
 
 
 
