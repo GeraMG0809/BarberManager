@@ -5,6 +5,7 @@ from helpers.citas import *
 from helpers.barbero import *
 from helpers.servicios import *
 from helpers.producto import *
+from helpers.venta import *
 import os
 
 
@@ -208,7 +209,7 @@ def admin():
 @app.route('/adminManager')
 def adminManager():
     if not session.get('admin'):
-        return redirect(url_for('adminLogin'))
+        return redirect(url_for('admin'))
 
     citas = select_citas_pendientes()
     barberos = select_barbers()
@@ -250,6 +251,31 @@ def agregar_barbero():
         insert_barbero(nombre, telefono, filename)  # solo guardamos el nombre del archivo
 
     return redirect(url_for('barber'))
+
+@app.route('/reportes',methods = ['GET','POST'])
+def reportes():
+    ventas = select_all_ventas()
+
+    return render_template('venta.html',ventas  = ventas)
+
+from datetime import datetime
+
+@app.route('/crear_venta', methods=['POST'])
+def crear_venta():
+    data = request.get_json()
+    
+    id_cita = data.get('id_cita')
+    tipo_pago = data.get('tipo_pago')
+    monto_final = data.get('monto_final')
+
+    if not id_cita or not tipo_pago or monto_final is None:
+        return jsonify({'error': 'Datos incompletos'}), 400
+
+    # Insertar la venta
+    insert_venta(id_cita=id_cita, tipo_pago=tipo_pago, monto_final=monto_final)
+
+    return redirect('adminManager')
+
 
 
 @app.route('/precio_producto', methods=['GET'])

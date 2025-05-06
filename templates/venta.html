@@ -28,38 +28,29 @@
           <li class="nav-item"><a class="nav-link" href="{{ url_for('adminManager') }}">Citas</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('barber') }}">Barberos</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('productos') }}">Productos</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('reportes') }} ">Reportes</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
   <div class="container my-4">
-    
-    
-    
-    <!-- Productos -->
-    <div class="section" id="productos">
-        <h2>Productos</h2>
-        <div class="row">
-          {% for producto in productos %}
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">{{ producto.nombre }}</h5>
-                <p>Categoría: {{ producto.categoria }}</p>
-                <p>Stock: {{ producto.stock }}</p>
-                <p>Precio: ${{ producto.precio }}</p>
-                <p class="{% if producto.estado == 'Disponible' %}text-success{% elif producto.estado == 'Agotado' %}text-danger{% else %}text-warning{% endif %}">
-                  Estado: {{ producto.estado }}
-                </p>
-              </div>
-            </div>
+      {% for venta in ventas %}
+      <div class="card mb-3 shadow-sm" style="border-left: 5px solid #007bff;">
+          <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+            <div class="me-3">
+            <h5 class="mb-1">Venta #{{ venta.id_venta }}</h5>
+            <p class="mb-0 text-muted">Fecha: {{ venta.fecha }}</p>
           </div>
-          {% endfor %}
+          <div class="me-3">
+            <p class="mb-0"><strong>Tipo de pago:</strong> {{ venta.tipo_pago }}</p>
+          </div>
+          <div>
+            <p class="mb-0"><strong>Monto:</strong> ${{ venta.monto_final }}</p>
+          </div>
         </div>
       </div>
-  
+      {% endfor %}
     </div>
     
 </body>

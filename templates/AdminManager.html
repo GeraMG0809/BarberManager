@@ -25,10 +25,10 @@
       <a class="navbar-brand" href="#">Barbería</a>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin') }}">Citas</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('adminManager') }}">Citas</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('barber') }}">Barberos</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('productos') }}">Productos</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('reportes') }} ">Reportes</a></li>
         </ul>
       </div>
     </div>
@@ -97,6 +97,7 @@
                 data-bs-toggle="modal" 
                 data-bs-target="#modalPago"
                 data-cliente="{{ cita.cliente }}"
+                data-idcita ="{{ cita.id_cita }}"
                 data-barbero="{{ cita.barbero }}"
                 data-servicio="{{ cita.servicio }}"
                 data-monto="{{ cita.precio }}">
@@ -117,48 +118,40 @@
 
   </div>
 
-  
-  <!-- Modal -->
-  <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Pago de Cita</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<!-- Modal de Pago -->
+<div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Pago de Cita</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
+        <p><strong>Barbero:</strong> <span id="modalBarbero"></span></p>
+        <p><strong>Servicio:</strong> <span id="modalServicio"></span></p>
+        <p><strong>Monto a pagar:</strong> $<span id="modalMonto"></span></p>
+
+        <!-- Método de Pago -->
+        <div class="mb-3">
+          <label for="metodoPago" class="form-label">Método de pago</label>
+          <select class="form-select" id="metodoPago">
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta">Tarjeta</option>
+          </select>
         </div>
-        <div class="modal-body">
-          <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
-          <p><strong>Barbero:</strong> <span id="modalBarbero"></span></p>
-          <p><strong>Servicio:</strong> <span id="modalServicio"></span></p>
-          <p><strong>Monto a pagar:</strong> $<span id="modalMonto"></span></p>
-  
-          <div class="mb-3">
-            <label for="metodoPago" class="form-label">Método de pago</label>
-            <select class="form-select" id="metodoPago">
-              <option value="efectivo">Efectivo</option>
-              <option value="tarjeta">Tarjeta</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="producto" class="form-label">Producto</label>
-            <select class="form-select" id="producto" name="producto">
-              {% for producto in productos %}
-                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary">Confirmar</button>
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btnConfirmarPago">Confirmar</button>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
+</div>
 
+
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static' ,filename='/js/adminManager.js') }}"></script>
+  <script src="{{ url_for('static' ,filename='../static/js/adminManager.js') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       configModal();
