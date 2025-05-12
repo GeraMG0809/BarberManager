@@ -14,7 +14,7 @@ def select_producto(nombre_producto: str):
             if resultado:
                 producto = Producto(resultado).to_dict()
     finally:
-        conexion.close()
+        conexion.close() 
 
     return producto
 
@@ -49,6 +49,7 @@ def select_productos():
     finally:
         conexion.close()
 
+    print(productos)
     return productos
 
 

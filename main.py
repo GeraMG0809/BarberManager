@@ -24,7 +24,6 @@ def index():
     user = session.get('user')
     form_id = None
     barberos = select_barbers()
-    paquetes = get_servicios()
     productos = select_productos()
 
 
@@ -39,12 +38,8 @@ def index():
         elif form_id == "editUserForm":
             return edit_user()
 
-    return render_template('index.html', 
-                           user=user,
-                           barberos = barberos,
-                           paquetes = paquetes,
-                           productos = productos)
-
+    #return render_template('index.html', user=user,barberos = barberos,paquetes = paquetes,productos = productos)
+    return render_template('index.html',barberos = barberos,productos= productos,user=user)
 
 #Ruta  de inicio de seesion
 @app.route('/login', methods=['GET', 'POST'])
@@ -57,7 +52,7 @@ def login():
 
         if not email or not password:
             error = 'Todos los campos son obligatorios'
-            return render_template('index.html', error=error, show_login_modal=True)
+            return render_template('loginUser.html', error=error)
 
         user = select_user_email(email)
 
@@ -73,39 +68,11 @@ def login():
 
         print("Error:", error)
 
-        return render_template('index.html', error=error, show_login_modal=True)
+        return render_template('loginUser.html', error=error)
 
-    return render_template('index.html')
+    return render_template('loginUser.html')
 
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    return redirect(url_for('index')) 
-
-
-@app.route('/horarios_disponibles', methods=['GET'])
-def horarios_disponibles():
-    barbero = request.args.get("barbero")
-    fecha = request.args.get("fecha")
-
-    if not barbero or not fecha:
-        return jsonify({"error": "Faltan parámetros"}), 400
-
-    id_barbero = select_barbero_id(barbero)
-
-    if id_barbero is None:
-        return jsonify({"error": "Barbero no encontrado"}), 404  # Evita consultas incorrectas
-
-    horarios = obtener_horarios_disponibles(id_barbero, fecha)
-
-    return jsonify(horarios)
-
-
-#-------------------------------------------------------#
-#-----------------Funciones de barberia-----------------#
-#-------------------------------------------------------#
-
-#Funcion de registro de usuarios
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     nombre = request.form.get("nombre")
     telefono = request.form.get("telefono")
@@ -134,8 +101,35 @@ def register():
     session['user_name'] = user_dict['name']
 
     flash("Registro exitoso. ¡Bienvenido!", "success")
-    return redirect(url_for('index'))   # O render_template('index.html')
+    return redirect(url_for('index')) 
 
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index')) 
+
+
+@app.route('/horarios_disponibles', methods=['GET'])
+def horarios_disponibles():
+    barbero = request.args.get("barbero")
+    fecha = request.args.get("fecha")
+
+    if not barbero or not fecha:
+        return jsonify({"error": "Faltan parámetros"}), 400
+
+    id_barbero = select_barbero_id(barbero)
+
+    if id_barbero is None:
+        return jsonify({"error": "Barbero no encontrado"}), 404  # Evita consultas incorrectas
+
+    horarios = obtener_horarios_disponibles(id_barbero, fecha)
+
+    return jsonify(horarios)
+
+
+#-------------------------------------------------------#
+#-----------------Funciones de barberia-----------------#
+#-------------------------------------------------------#
 
 #Funcion de reservacion nueva
 def new_reserv():

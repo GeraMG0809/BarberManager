@@ -5,6 +5,7 @@ class Producto:
         self.precio = datos[2]
         self.estado = datos[3]
         self.nombre_producto = datos[4]
+        self.imagen_producto = datos[5]
 
     def to_dict(self):
         return {
@@ -12,7 +13,8 @@ class Producto:
             'categoria': self.categoria,
             'precio': self.precio,
             'estado': self.estado,
-            'nombre_producto': self.nombre_producto
+            'nombre_producto': self.nombre_producto,
+            'imagen_producto' : self.imagen_producto
         }
 
     @classmethod
@@ -22,5 +24,6 @@ class Producto:
             data['categoria'],
             data['precio'],
             data['estado'],
-            data['nombre_producto']
+            data['nombre_producto'],
+            data['imagen_producto']
         ))

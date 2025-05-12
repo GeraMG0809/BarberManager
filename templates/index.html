@@ -1,298 +1,496 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Barbería Elegante</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbería Elegante</title>
+
+    <!-- font awesome cdn link  -->
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/css/lightgallery.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="../static/styles/style.css">
-  <link rel="stylesheet" href="../static/styles/index_css.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- custom css file link  -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/styles/style.css') }}">
+
+
 </head>
 <body>
-  <div class="container mt-3">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  </div>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #AF47D2; color: white;">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-white" href="#">Barbería Elegante</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#paquetes">Paquetes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#beneficios">Beneficios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#tienda">Tienda</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#barberos">Barberos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#testimonios">Testimonios</a>
-          </li>
-        </ul>
-          <!-- Crear un if ,para un dropdown de usuario y un modal de login -->
-           {% if user %}
-           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-               aria-expanded="false">
-                <i class="bi bi-person"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li>
-                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                        <i class="bi bi-person"></i> Modificar perfil
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="">
-                      <i class="bi bi-calendar-event"></i> Citas
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="{{ url_for('logout') }}">
-                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                    </a>
-                </li>
-                
-            </ul>
-        </li>
-           {% else %}
-          <button class="btn btn-outline-light rounded-circle" data-bs-toggle="modal" data-bs-target="#loginModal">
-            <i class="bi bi-person"></i>
-          </button>
-          {% endif %}
-      </div>
-    </div>
-  </nav>
 
-  <!-- Hero Section -->
-  <section class="py-5 text-white text-center" style="background-color: #26355D;">
-    <div class="container py-5">
-      <h1 class="display-4 fw-bold mb-4">Bienvenido a Barbería Elegante</h1>
-      <p class="lead mb-4">Donde el estilo se encuentra con la tradición</p>
-      <a href="#reservar" class="btn btn-lg" style="background-color: #FF8F00; color: white;">Reservar Cita</a>
-    </div>
-  </section>
+<!-- header section starts  -->
 
-  <!-- Packages Section -->
-  <section id="paquetes" class="py-5" data-aos="fade-up">
-    <div class="container">
-      <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Nuestros Paquetes</h2>
-      <div class="row g-4">
-        {% for paquete in paquetes %}
-        <div class="col-md-4">
-          <div class="card h-100" style="background-color: #fff7ed; border-color: #fdba74;">
-            <div class="card-body">
-              <h3 class="card-title" style="color: #26355D;">{{paquete.nombre_servicio}}</h3>
-              <p class="card-text text-muted">{{paquete.servicio}}</p>
-              <p class="fs-2 fw-bold" style="color: #FF8F00;">${{paquete.precio}}</p>
+<header class="header">
+
+    <a href="#home" class="logo"> <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+    </a>
+
+    <form action="" class="search-form">
+        <input type="search" name="" placeholder="Buscar..." id="search-box">
+        <label for="search-box" class="fas fa-search"></label>
+    </form>
+
+    <div class="icons">
+        <div id="menu-btn" class="fas fa-bars"></div>
+        <div id="search-btn" class="fas fa-search"></div>
+        <a href="{{ url_for('login') }}" class="fas fa-user"></a>
+    </div>
+
+</header>
+
+<!-- navbar section  -->
+
+<nav class="navbar">
+    <div id="close-navbar" class="fas fa-times"></div>
+    <a href="#home">inicio</a>
+    <a href="#shop">tienda</a>
+    <a href="#gallery">galería</a>
+    <a href="#team">barberos</a>
+    <a href="#arrivals">productos nuevos</a>
+    <a href="#reservar">reservar cita</a>
+</nav>
+
+<!-- navbar section  -->
+
+<!-- header section ends -->
+
+<!-- home section starts  -->
+
+<section class="home" id="home">
+
+    <div class="slide active">
+        <div class="content">
+            <img src="{{ url_for('static', filename='images/content-img-1.png') }}" alt="">
+            <span>Lo mejor sólo en Barbería Elegante</span>
+            <h3>cortes de cabello</h3>
+            <a href="#reservar" class="btn">reservar cita</a>
+            <div class="controls">
+                <div class="fas fa-angle-left" onclick="prev()"></div>
+                <div class="fas fa-angle-right" onclick="next()"></div>
             </div>
-          </div>
         </div>
-        {% endfor %}
-      </div>
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/home-img-1.png') }}" alt="">
+        </div>
     </div>
-  </section>
 
-  <!-- Benefits Section -->
-  <section id="beneficios" class="py-5" style="background-color: #f2e8e5;" data-aos="fade-right">
-    <div class="container">
-      <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Beneficios de Elegirnos</h2>
-      <div class="row g-4">
-        <div class="col-md-6">
-          <div class="card h-100" style="background-color: #fff7ed; border-color: #fdba74;">
-            <div class="card-body">
-              <h3 class="card-title text-center fw-bold mb-4" style="color: #26355D;">Invitado</h3>
-              <ul class="list-unstyled">
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Corte de cabello profesional</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Ambiente relajado y acogedor</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Productos de alta calidad</li>
-                <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Descuentos en servicios</li>
-                <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Reservas prioritarias</li>
-                <li class="mb-3"><i class="bi bi-x-circle-fill text-muted me-2"></i> Tratamientos exclusivos</li>
-              </ul>
-              <div class="text-center mt-4">
-                <button lass="btn btn-outline-light rounded-circle" data-bs-toggle="modal" data-bs-target="#loginModal" style="background-color: #FF8F00; color: white;">Hazte Miembro</button>
-              </div>
+    <div class="slide">
+        <div class="content">
+            <img src="{{ url_for('static', filename='images/content-img-2.png') }}" alt="">
+            <span>Lo mejor sólo en Barbería Elegante</span>
+            <h3>afeitados</h3>
+            <a href="#reservar" class="btn">reservar cita</a>
+            <div class="controls">
+                <div class="fas fa-angle-left" onclick="prev()"></div>
+                <div class="fas fa-angle-right" onclick="next()"></div>
             </div>
-          </div>
         </div>
-        <div class="col-md-6">
-          <div class="card h-100" style="background-color: #ffedd5; border-color: #fdba74;">
-            <div class="card-body">
-              <h3 class="card-title text-center fw-bold mb-4" style="color: #26355D;">Miembro</h3>
-              <ul class="list-unstyled">
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Corte de cabello profesional</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Ambiente relajado y acogedor</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Productos de alta calidad</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Descuentos en servicios</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Reservas prioritarias</li>
-                <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #FF8F00;"></i> Tratamientos exclusivos</li>
-              </ul>
-            </div>
-          </div>
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/home-img-2.png') }}"alt="">
         </div>
-      </div>
     </div>
-  </section>
 
- <!-- Shop Section -->
-  <section id="tienda" class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Nuestra Tienda</h2>
-      <div class="product-carousel-wrapper">
-        <div class="row g-4 product-carousel" id="product-carousel">
-          {% for producto in productos %}
-          <div class="col-md-4 product-item">
-            <div class="card h-100">
-              <img src="https://via.placeholder.com/300" class="card-img-top" alt="Pomada para Cabello">
-              <div class="card-body">
-                <h3 class="card-title" style="color: #26355D;">{{ producto.nombre_producto }}</h3>
-                <h5 class="mb-3" style="color: #FF8F00;"> {{ producto.categoria}} </h5>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                  <span class="fs-4 fw-bold text-success">$ {{ producto.precio }}</span>
-                  <button class="btn" style="background-color: #FF8F00; color: white;">Comprar</button>
+    <div class="slide">
+        <div class="content">
+            <img src="{{ url_for('static', filename='images/content-img-3.png') }}" alt="">
+            <span>Lo mejor sólo en Barbería Elegante</span>
+            <h3>skin care</h3>
+            <a href="#reservar" class="btn">reservar cita</a>
+            <div class="controls">
+                <div class="fas fa-angle-left" onclick="prev()"></div>
+                <div class="fas fa-angle-right" onclick="next()"></div>
+            </div>
+        </div>
+        <div class="image">
+            <img src=" {{ url_for('static', filename='images/home-img-3.png') }} " alt="">
+        </div>
+    </div>
+
+</section>
+
+<!-- home section ends -->
+
+<!-- category section starts  -->
+
+<section class="category">
+
+    <a href="#" class="box">
+        <img src="{{ url_for('static', filename='images/cera.png') }}" alt="">
+        <p>Cera para cabello</p>
+    </a>
+
+    <a href="#" class="box">
+        <img src="{{ url_for('static', filename='images/aceite.png') }}" alt="">
+        <p>Aceite para barba</p>
+    </a>
+
+    <a href="#" class="box">
+        <img src="{{ url_for('static', filename='images/aftershave.png') }}" alt="">
+        <p>Aftershave</p>
+    </a>
+
+    <a href="#" class="box">
+        <img src="{{ url_for('static', filename='images/navajas.png') }}" alt="">
+        <p>Navajas y rastrillos</p>
+    </a>
+
+    <a href="#" class="box">
+        <img src="{{ url_for('static', filename='images/espuma.png') }}" alt="">
+        <p>Espuma de afeitar</p>
+    </a>
+
+    <a href="#" class="box">
+        <img src="{{ url_for('static', filename='images/colonia.png') }}" alt="">
+        <p>Colonia</p>
+    </a>
+
+</section>
+
+<!-- category section ends -->
+
+<!-- about section starts  -->
+
+<section class="about" id="about">
+
+    <div class="content">
+        <span>¿Por qué escogernos?</span>
+        <h3>Barbería Elegante hace la diferencia</h3>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum explicabo, quos voluptate incidunt illo, blanditiis, accusamus ut quisquam quia sapiente iure. Rerum earum corrupti neque, nobis ratione obcaecati voluptatem fuga.</p>
+        <a href="#" class="btn">leer más...</a>
+    </div>
+    
+</section>
+
+<!-- about section ends -->
+
+<!-- shop section starts  -->
+
+<section class="shop" id="shop">
+
+    <div class="heading">
+        <h1>Productos</h1>
+        <p>¡Adquiere tus productos en tienda ya!</p>
+    </div>
+
+    <div class="swiper products-slider">
+
+        <div class="swiper-wrapper">
+            {% for producto in productos %}
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <span class="discount">-25%</span>
+                    <img src="{{ url_for('static', filename='images/' + producto.imagen_producto) }}" alt="">
                 </div>
-              </div>
+                <div class="content">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p>{{ producto.nombre_producto }}</p>
+                    <div class="price">${{ producto.precio }} <span>$79.99</span></div>
+                </div>
             </div>
-          </div>
-          {% endfor %}
+            {% endfor %}
         </div>
+        
 
-      </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
     </div>
-  </section>
 
+</section>
 
-  <!-- Barbers Section -->
-  <section id="barberos" class="py-5" style="background-color: #f2e8e5;">
-    <div class="container">
-      <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Nuestros Barberos</h2>
-      <div class="row g-4">
+<!-- shop section ends -->
+
+<!-- gallery section starts  -->
+
+<section class="gallery" id="gallery">
+
+    <div class="heading">
+        <h1>Nuestros trabajos</h1>
+        <p>¡Los resultados no mienten!</p>
+    </div>
+
+    <div class="lightbox">
+        <a href="images/trabajo-1.jpg"><img src="{{ url_for('static', filename='images/trabajo-1.jpg') }}" alt=""></a>
+        <a href="images/trabajo-2.jpg"><img src="{{ url_for('static', filename='images/trabajo-2.jpg') }}" alt=""></a>
+        <a href="images/trabajo-3.jpg"><img src="{{ url_for('static', filename='images/trabajo-3.jpg') }}" alt=""></a>
+        <a href="images/trabajo-4.jpg"><img src="{{ url_for('static', filename='images/trabajo-4.jpg') }}" alt=""></a>
+        <a href="images/trabajo-5.jpg"><img src="{{ url_for('static', filename='images/trabajo-5.jpg') }}" alt=""></a>
+        <a href="images/trabajo-6.jpg"><img src="{{ url_for('static', filename='images/trabajo-6.jpg') }}" alt=""></a>
+    </div>
+
+</section>
+
+<!-- gallery section ends -->
+
+<!-- barbers section starts  -->
+
+<section class="team" id="team">
+
+    <div class="heading">
+        <h1>Barberos</h1>
+        <p>En barbería elegante contamos con los mejores barberos de la zona, ven y conocelos</p>
+    </div>
+
+    <div class="box-container">
         {% for barbero in barberos %}
-        <div class="col-md-4">
-          <div class="card h-100 cursor-pointer" style="background-color: #fff7ed; border-color: #fdba74;" data-bs-toggle="modal" data-bs-target="#barberModal{{ barbero.id_barbero }}">
-            <img src="{{ url_for('static', filename='imges/' ~ barbero.imagenes) }}" class="card-img-top rounded-circle p-3" alt="{{ barbero.nombre }}">
-            <div class="card-body text-center">
-              <h3 class="card-title" style="color: #26355D;">{{ barbero.nombre }}</h3>
-              <p class="card-text text-muted">Cortes clásicos</p>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Modal específico para este barbero -->
-        <div class="modal fade" id="barberModal{{ barbero.id_barbero }}" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title fw-bold" style="color: #26355D;">{{ barbero.nombre }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="row">
-                  <div class="col-md-6 text-center">
-                    <img src="{{ url_for('static', filename='imges/' ~ barbero.imagenes) }}" class="card-img-top rounded-circle p-3" alt="{{ barbero.nombre }}">
-                    <p class="text-muted">Cortes clásicos</p>
-                    <div class="d-flex justify-content-center align-items-center">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <i class="bi bi-star-half text-warning"></i>
-                      <span class="ms-2">4.8</span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <h4 class="fw-bold mb-3" style="color: #26355D;">Comentarios</h4>
-                    <ul class="list-unstyled">
-                      <li class="mb-2">• Excelente trabajo</li>
-                      <li class="mb-2">• Muy profesional</li>
-                      <li class="mb-2">• Lo recomiendo</li>
-                    </ul>
-                    <h4 class="fw-bold mb-3 mt-4" style="color: #26355D;">Trabajos realizados</h4>
-                    <div class="row g-2">
-                      <div class="col-6">
-                        <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 1">
-                      </div>
-                      <div class="col-6">
-                        <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 2">
-                      </div>
-                      <div class="col-6">
-                        <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 3">
-                      </div>
-                      <div class="col-6">
-                        <img src="https://via.placeholder.com/200" class="img-fluid rounded" alt="Trabajo 4">
-                      </div>
-                    </div>
-                  </div>
+        <div class="box">
+            <div class="image">
+                <img src="{{ url_for('static', filename='images/' ~ barbero.imagenes) }}"alt="">
+                <div class="share">
+                    <a href="#" class="fab fa-facebook-f"></a>
+                    <a href="#" class="fab fa-twitter"></a>
+                    <a href="#" class="fab fa-instagram"></a>
+                    <a href="#" class="fab fa-linkedin"></a>
                 </div>
-              </div>
             </div>
-          </div>
+            <div class="content">
+                <h3> {{barbero.nombre}} </h3>
+                <p>Experto en barbas</p>
+            </div>
         </div>
         {% endfor %}
-      </div>
-    </div>
-  </section>
-  
-  
 
-  <!-- Testimonials Section -->
-  <section id="testimonios" class="py-5">
-    <div class="container">
-      <h2 class="text-center mb-5 fw-bold" style="color: #26355D;">Lo que dicen nuestros clientes</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h3 class="card-title" style="color: #26355D;">Pedro Sánchez</h3>
-              <p class="card-text fst-italic">"El mejor corte de pelo que he tenido. ¡Volveré seguro!"</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h3 class="card-title" style="color: #26355D;">Luis Martínez</h3>
-              <p class="card-text fst-italic">"Ambiente genial y servicio de primera. Totalmente recomendado."</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100">
-            <div class="card-body">
-              <h3 class="card-title" style="color: #26355D;">Andrés López</h3>
-              <p class="card-text fst-italic">"Me encanta cómo cuidan cada detalle. Son verdaderos profesionales."</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
 
-  <!-- Booking Form Section -->
-  <section id="reservar" class="py-5">
+</section>
+
+<!-- barbers section ends -->
+
+<!-- new products section starts  -->
+
+<section class="arrivals" id="arrivals">
+
+    <div class="heading">
+        <h1>Productos nuevos</h1>
+        <p>¡Adquiere y goza de los nuevos productos llegados a barbería elegante!</p>
+    </div>
+
+    <div class="swiper arrivals-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/arrival-1.jpg') }}" alt="">
+                </div>
+                <div class="content">
+                    <p>Acondicionador de cabello para él y ella</p>
+                    <div class="price">$49.99 <span>$79.99</span></div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/arrival-2.jpg') }}" alt="">
+                </div>
+                <div class="content">
+                    <p>Bálsamo de cabello para ella</p>
+                    <div class="price">$49.99 <span>$79.99</span></div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/arrival-3.jpg') }}" alt="">
+                </div>
+                <div class="content">
+                    <p>Activador de rizado para ella</p>
+                    <div class="price">$49.99 <span>$79.99</span></div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/arrival-4.jpg') }}" alt="">
+                </div>
+                <div class="content">
+                    <p>Afeitadora clásica</p>
+                    <div class="price">$49.99 <span>$79.99</span></div>
+                </div>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/arrival-5.jpg') }}" alt="">
+                </div>
+                <div class="content">
+                    <p>Fragancia para ella</p>
+                    <div class="price">$49.99 <span>$79.99</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
+    </div>
+    
+</section>
+
+<!-- new products section ends -->
+
+<!-- reviews section starts  -->
+
+<section class="reviews">
+
+    <div class="swiper reviews-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide slide">
+                <div class="user">
+                    <img src="{{ url_for('static', filename='images/pic-1.png') }}" alt="">
+                    <div class="info">
+                        <h3>Alberto Velazquez</h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. In quis ipsa aspernatur incidunt iusto veniam cumque error quaerat officia. Aspernatur?</p>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="user">
+                    <img src="{{ url_for('static', filename='images/pic-2.png') }}" alt="">
+                    <div class="info">
+                        <h3>Lorena Benitez</h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum similique, numquam non, quasi, voluptatibus perspiciatis fugiat incidunt veniam nulla in aut aliquid necessitatibus nobis reiciendis ullam explicabo. Nulla, rem adipisci.</p>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="user">
+                    <img src="{{ url_for('static', filename='images/pic-3.png') }}" alt="">
+                    <div class="info">
+                        <h3>Carlos Ibarra</h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit aliquid mollitia voluptatem alias illo officiis.</p>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="user">
+                    <img src="{{ url_for('static', filename='images/pic-4.png') }}" alt="">
+                    <div class="info">
+                        <h3>Maria Pulido</h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. In quis ipsa aspernatur incidunt iusto veniam cumque error quaerat officia. Aspernatur?</p>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="user">
+                    <img src="{{ url_for('static', filename='images/pic-5.png') }}" alt="">
+                    <div class="info">
+                        <h3>José García</h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus sequi minima sed obcaecati iste beatae quo praesentium, deleniti earum velit labore nobis voluptates a quam veniam delectus fugiat! Saepe, eos!</p>
+            </div>
+
+            <div class="swiper-slide slide">
+                <div class="user">
+                    <img src="{{ url_for('static', filename='images/pic-6.png') }}" alt="">
+                    <div class="info">
+                        <h3>Isabel Martinez</h3>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. In quis ipsa aspernatur incidunt iusto veniam cumque error quaerat officia. Aspernatur?</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- reviews section ends  -->
+
+<!-- service section starts  -->
+
+<section class="service">
+
+    <div class="box">
+        <img src="{{ url_for('static', filename='images/service-1.png') }}" alt="">
+        <h3>Respeto a todos nustros clientes</h3>
+        <p>En barbería elegante contamos con el mejor personal para brindar la mejor experiencia posible con todo el respeto posible y más</p>
+    </div>
+
+    <div class="box">
+        <img src="{{ url_for('static', filename='images/service-2.png') }}" alt="">
+        <h3>Conviertete en miembro</h3>
+        <p>Al hacerte de miembro de barbería elegante podrás contar con mayores beneficios, ¡Unete ya!</p>
+    </div>
+
+    <div class="box">
+        <img src="{{ url_for('static', filename='images/service-3.png') }}" alt="">
+        <h3>Productos de confianza</h3>
+        <p>En barbería elegante damos lo mejor para los mejores, ¡adquiere tus productos ya!</p>
+    </div>
+
+</section>
+
+<!-- service section ends -->
+
+<!-- reservation section starts  -->
+
+<section id="reservar" class="py-5">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6">
@@ -314,14 +512,14 @@
                   <input type="date" name="fecha" class="form-control" id="date" required>
                 </div>
                 <div class="mb-3">
-                  <label for="barber" class="form-label">Barbero</label>
-                  <select class="form-select" name="barbero" id="barber" required>
-                    <option value="" selected disabled>Selecciona un barbero</option>
-                    {% for barbero in barberos %}
+                    <label for="barber" class="form-label">Barbero</label>
+                    <select class="form-select" name="barbero" id="barber" required>
+                      <option value="" selected disabled>Selecciona un barbero</option>
+                      {% for barbero in barberos %}
                       <option value="{{ barbero.nombre }}">{{ barbero.nombre }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
+                      {% endfor %}
+                    </select>
+                  </div>
                 <div class="mb-3">
                   <label for="time" class="form-label">Hora</label>
                   <select name="hora" id="time" class="form-select" required>
@@ -346,139 +544,63 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="py-4 text-white" style="background-color: #26355D;">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-4 mb-3 mb-md-0">
-          <h3 class="fw-bold">Barbería Elegante</h3>
-          <p>Tu barbería de confianza</p>
-        </div>
-        <div class="col-md-4 mb-3 mb-md-0 text-center">
-          <nav class="nav justify-content-center">
-            <a class="nav-link text-white" href="#paquetes">Paquetes</a>
-            <a class="nav-link text-white" href="#beneficios">Beneficios</a>
-            <a class="nav-link text-white" href="#tienda">Tienda</a>
-            <a class="nav-link text-white" href="#barberos">Barberos</a>
-            <a class="nav-link text-white" href="#testimonios">Testimonios</a>
-          </nav>
-        </div>
-        <div class="col-md-4 text-md-end">
-          <p>&copy; 2023 Barbería Elegante. Todos los derechos reservados.</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+<!-- reservation section ends -->
 
-  <!-- Login/Signup Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">Cuenta de Usuario</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <ul class="nav nav-tabs" id="authTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button" role="tab" aria-controls="login-tab-pane" aria-selected="true">Iniciar Sesión</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-tab-pane" type="button" role="tab" aria-controls="signup-tab-pane" aria-selected="false">Registrarse</button>
-            </li>
-          </ul>
-          <div class="tab-content pt-3" id="authTabsContent">
-            <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
-              <form id="loginForm" method="POST" action="/">
-                <input type="hidden" name="form_id" value="loginForm">
-  
-                {% if error %}
-                <div class="alert alert-danger" role="alert">
-                  {{ error }}
-                </div>
-                {% endif %}
-  
-                <div class="mb-3">
-                  <label for="loginEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" name="email" placeholder="tu@email.com" required>
-                </div>
-                <div class="mb-3">
-                  <label for="loginPassword" class="form-label">Contraseña</label>
-                  <input type="password" class="form-control" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-              </form>
-            </div>
-  
-            <div class="tab-pane fade" id="signup-tab-pane" role="tabpanel" aria-labelledby="signup-tab" tabindex="0">
-              <form id="signupForm" action="/" method="POST"> 
-                <input type="hidden" name="form_id" value="signupForm">        
-                <div class="mb-3">
-                    <label for="signupName" class="form-label">Nombre</label>
-                    <input type="text" name="nombre" class="form-control" id="signupName" placeholder="Tu nombre" required>
-                </div>
-                <div class="mb-3">
-                    <label for="signupPhone" class="form-label">Teléfono</label>
-                    <input type="tel" name="telefono" class="form-control" id="signupPhone" placeholder="Tu teléfono" required>
-                </div>
-                <div class="mb-3">
-                    <label for="signupEmail" class="form-label">Email</label>
-                    <input type="email" name="correo_electronico" class="form-control" id="signupEmail" placeholder="tu@email.com" required>
-                </div>
-                <div class="mb-3">
-                    <label for="signupPassword" class="form-label">Contraseña</label>
-                    <input type="password" name="password" class="form-control" id="signupPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-              </form>            
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Barber Modals -->
-  <!-- Barber Modal 1 -->
-  
+<!-- footer section starts  -->
 
-    <!-- Modal para modificar datos del usuario -->
-  <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editUserModalLabel">Modificar Datos</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editUserForm" method="POST">
-                    <input type="hidden" name="form_id" value="editUserForm">
-                    <div class="mb-3">
-                        <label for="editName" class="form-label">Nombre</label>
-                        <input type="text" name="nombre" class="form-control" id="editName" placeholder="Tu nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editPhone" class="form-label">Teléfono</label>
-                        <input type="tel" name="telefono" class="form-control" id="editPhone" placeholder="Tu teléfono" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Guardar cambios</button>
-                </form>
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a class="link" href="#home"> <i class="fas fa-angle-right"></i> inicio</a>
+            <a class="link" href="#shop"> <i class="fas fa-angle-right"></i> tienda</a>
+            <a class="link" href="#gallery"> <i class="fas fa-angle-right"></i> galería</a>
+            <a class="link" href="#team"> <i class="fas fa-angle-right"></i> barberos</a>
+            <a class="link" href="#arrivals"> <i class="fas fa-angle-right"></i> productos nuevos</a>
+            <a class="link" href="#blogs"> <i class="fas fa-angle-right"></i> reservar cita</a>
+        </div>
+
+        <div class="box">
+            <h3>extra links</h3>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> private policy </a>
+            <a href="#" class="link"> <i class="fas fa-angle-right"></i> terms of use </a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <p> <i class="fas fa-phone"></i> +123-456-7890 </p>
+            <p> <i class="fas fa-phone"></i> +111-222-3333 </p>
+            <p> <i class="fas fa-envelope"></i> shaikhanas@gmail.com </p>
+            <p> <i class="fas fa-map"></i> mumbai, india - 400104 </p>
+            <div class="share">
+                <a href="#" class="fab fa-facebook-f"></a>
+                <a href="#" class="fab fa-twitter"></a>
+                <a href="#" class="fab fa-instagram"></a>
+                <a href="#" class="fab fa-linkedin"></a>
             </div>
         </div>
+
     </div>
-  </div>
-  {% if error %}
-  <script>
-    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-    loginModal.show();
-  </script>
-  {% endif %}
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Custom JS -->
-  <script src="js/script.js"></script>
-  <script src="../static/js/horario_disponible.js"></script>
-  <script src="../static/js/index_js.js"></script>
+
+    <div class="credit"> creado por <span>equipo mango</span> | todos los derechos reservados! </div>
+
+</section>
+
+<!-- footer section ends -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/js/lightgallery.min.js"></script>
+
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<!-- custom js file link      -->
+<script src="{{ url_for('static' ,filename='../static/js/script.js') }}"></script>
+<script src="{{ url_for('static' ,filename='../static/js/horario_disponible.js') }}"></script>
+
+<script>
+    lightGallery(document.querySelector('.gallery .lightbox'));
+</script>
+    
 </body>
 </html>
-
