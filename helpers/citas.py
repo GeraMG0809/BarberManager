@@ -72,14 +72,6 @@ def select_cita_filter(tipo_filtro : str, filtro: str):
     return citas_filtradas
 
 
-def Update_cita_fin(id_cita: int):
-    barberManager = Connection()
-
-    with barberManager.cursor() as cursor:
-        cursor.execute(f"UPDATE Cita SET estado ='FINALIZADA' WHERE id_cita = {id_cita}")
-
-    barberManager.commit()
-    barberManager.close()
 
 def citas_por_usuario(id_usuario:int):
     barberManager = Connection()
@@ -137,3 +129,26 @@ def obtener_horarios_disponibles(id_barbero: int, fecha: str):
     horarios_libres = [hora for hora in horarios_disponibles if hora not in horario_ocupado]
     return horarios_libres
   # Asegurar cierre de conexión incluso si hay error
+
+def actualizar_estado_cita(id_cita: int, estado: str) -> bool:
+    """
+    Actualiza el estado de una cita
+    Args:
+        id_cita: ID de la cita a actualizar
+        estado: Nuevo estado de la cita ('PENDIENTE', 'FINALIZADA', etc.)
+    Returns:
+        bool: True si se actualizó correctamente, False en caso contrario
+    """
+    barberManager = Connection()
+    try:
+        with barberManager.cursor() as cursor:
+            sql = "UPDATE Cita SET estado = %s WHERE id_cita = %s"
+            cursor.execute(sql, (estado, id_cita))
+            barberManager.commit()
+            return True
+    except Exception as e:
+        print(f"Error al actualizar estado de cita: {e}")
+        barberManager.rollback()
+        return False
+    finally:
+        barberManager.close()
