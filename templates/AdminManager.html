@@ -130,16 +130,36 @@
         <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
         <p><strong>Barbero:</strong> <span id="modalBarbero"></span></p>
         <p><strong>Servicio:</strong> <span id="modalServicio"></span></p>
-        <p><strong>Monto a pagar:</strong> $<span id="modalMonto"></span></p>
+        <p><strong>Monto del servicio:</strong> $<span id="modalMonto"></span></p>
+
+        <!-- Selector de Productos -->
+        <div class="mb-3">
+          <label for="selectorProductos" class="form-label">Agregar Producto</label>
+          <select class="form-select" id="selectorProductos" required>
+            <option value="">Seleccione un producto</option>
+            {% for producto in productos %}
+            <option value="{{ producto.id_producto }}" data-precio="{{ producto.precio }}">
+              {{ producto.nombre_producto }} - ${{ producto.precio }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Precio del Producto -->
+        <p><strong>Precio del producto:</strong> $<span id="precioProducto">0.00</span></p>
+        
+        <!-- Monto Final -->
+        <p><strong>Monto final a pagar:</strong> $<span id="montoFinal"></span></p>
 
         <!-- Método de Pago -->
         <div class="mb-3">
           <label for="metodoPago" class="form-label">Método de pago</label>
-          <select class="form-select" id="metodoPago">
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
+          <select class="form-select" id="metodoPago" required>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta">Tarjeta</option>
           </select>
         </div>
+      </div>
       <div class="modal-footer">
         <button class="btn btn-primary" id="btnConfirmarPago">Confirmar</button>
         <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

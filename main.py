@@ -74,34 +74,37 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    nombre = request.form.get("nombre")
-    telefono = request.form.get("telefono")
-    email = request.form.get("correo_electronico")
-    password = request.form.get("password")
+    if request.method == 'POST':
+        nombre = request.form.get("nombre")
+        telefono = request.form.get("telefono")
+        email = request.form.get("correo_electronico")
+        password = request.form.get("password")
 
-    # Validación de campos vacíos (opcional pero recomendado)
-    if not nombre or not telefono or not email or not password:
-        flash("Todos los campos son obligatorios", "warning")
-        return redirect('/registro')
+        # Validación de campos vacíos
+        if not nombre or not telefono or not email or not password:
+            flash("Todos los campos son obligatorios", "warning")
+            return redirect(url_for('login'))
 
-    # Verificar si el usuario ya existe
-    if select_user_email(email):
-        flash("Este correo ya está registrado. Intenta con otro.", "danger")
-        return redirect(url_for('index'))     
-    
-    # Registrar nuevo usuario
-    new_user(nombre, telefono, email, password)
+        # Verificar si el usuario ya existe
+        if select_user_email(email):
+            flash("Este correo ya está registrado. Intenta con otro.", "danger")
+            return redirect(url_for('login'))     
+        
+        # Registrar nuevo usuario
+        new_user(nombre, telefono, email, password)
 
-    # Obtener el usuario recién creado (puedes usar select_user_email)
-    user = select_user_email(email)
-    user_dict = user.to_dict()
+        # Obtener el usuario recién creado
+        user = select_user_email(email)
+        if user:
+            user_dict = user.to_dict()
+            session['user'] = user_dict
+            flash("Registro exitoso. ¡Bienvenido!", "success")
+            return redirect(url_for('index'))
+        
+        flash("Error al crear el usuario. Intente nuevamente.", "danger")
+        return redirect(url_for('login'))
 
-    # Iniciar sesión
-    session['user_id'] = user_dict['id']  # Asegúrate de que 'id' esté en la consulta
-    session['user_name'] = user_dict['name']
-
-    flash("Registro exitoso. ¡Bienvenido!", "success")
-    return redirect(url_for('index')) 
+    return render_template('loginUser.html')
 
 @app.route('/logout')
 def logout():
@@ -256,19 +259,61 @@ from datetime import datetime
 
 @app.route('/crear_venta', methods=['POST'])
 def crear_venta():
-    data = request.get_json()
-    
-    id_cita = data.get('id_cita')
-    tipo_pago = data.get('tipo_pago')
-    monto_final = data.get('monto_final')
+    try:
+        data = request.get_json()
+        
+        id_cita = data.get('id_cita')
+        id_producto = data.get('id_producto')
+        tipo_pago = data.get('tipo_pago')
+        monto_final = data.get('monto_final')
 
-    if not id_cita or not tipo_pago or monto_final is None:
-        return jsonify({'error': 'Datos incompletos'}), 400
+        if not all([id_cita, id_producto, tipo_pago, monto_final]):
+            return jsonify({
+                'success': False,
+                'message': 'Datos incompletos'
+            }), 400
 
-    # Insertar la venta
-    insert_venta(id_cita=id_cita, tipo_pago=tipo_pago, monto_final=monto_final)
+        # Validar que tipo_pago sea válido
+        if tipo_pago not in ['Efectivo', 'Tarjeta']:
+            return jsonify({
+                'success': False,
+                'message': 'Tipo de pago inválido'
+            }), 400
 
-    return redirect('adminManager')
+        # Insertar la venta
+        id_venta = insert_venta(
+            id_cita=id_cita,
+            id_producto=id_producto,
+            tipo_pago=tipo_pago,
+            monto_final=float(monto_final)
+        )
+
+        if not id_venta:
+            return jsonify({
+                'success': False,
+                'message': 'Error al registrar la venta'
+            }), 500
+
+        # Actualizar el estado de la cita a FINALIZADA
+        if not actualizar_estado_cita(id_cita, 'FINALIZADA'):
+            # Si falla la actualización del estado, revertir la venta
+            # Aquí podrías agregar lógica para revertir la venta si lo consideras necesario
+            return jsonify({
+                'success': False,
+                'message': 'Error al actualizar el estado de la cita'
+            }), 500
+
+        return jsonify({
+            'success': True,
+            'message': 'Venta registrada y cita finalizada correctamente',
+            'id_venta': id_venta
+        })
+            
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error: {str(e)}'
+        }), 500
 
 
 
