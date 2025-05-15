@@ -62,9 +62,11 @@ CREATE TABLE Servicios(
 CREATE TABLE Ventas(
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
     id_cita  INT NOT NULL,
+    id_producto INT NOT NULL,
     fecha TIMESTAMP NOT NULL,
-    tipo_pago INT NOT NULL,
+    tipo_pago ENUM('Efectivo','Tarjeta') NOT NULL,
     monto_final FLOAT NOT NULL,
     estado ENUM('ACTIVO','INACTIVO') NOT NULL DEFAULT 'ACTIVO',
-    FOREIGN KEY (id_cita) REFERENCES Cita(id_cita)
+    FOREIGN KEY (id_cita) REFERENCES Cita(id_cita),
+    FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
 );
