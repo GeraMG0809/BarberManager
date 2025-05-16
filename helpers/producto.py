@@ -49,7 +49,6 @@ def select_productos():
     finally:
         conexion.close()
 
-    print(productos)
     return productos
 
 
