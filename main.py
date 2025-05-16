@@ -74,34 +74,43 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    nombre = request.form.get("nombre")
-    telefono = request.form.get("telefono")
-    email = request.form.get("correo_electronico")
-    password = request.form.get("password")
+    if request.method == 'POST':
+        nombre = request.form.get("nombre")
+        telefono = request.form.get("telefono")
+        email = request.form.get("correo_electronico")
+        password = request.form.get("password")
 
-    # Validación de campos vacíos (opcional pero recomendado)
-    if not nombre or not telefono or not email or not password:
-        flash("Todos los campos son obligatorios", "warning")
-        return redirect('/registro')
+        # Validación de campos vacíos
+        if not nombre or not telefono or not email or not password:
+            flash("Todos los campos son obligatorios", "warning")
+            return redirect(url_for('login'))
 
-    # Verificar si el usuario ya existe
-    if select_user_email(email):
-        flash("Este correo ya está registrado. Intenta con otro.", "danger")
-        return redirect(url_for('index'))     
-    
-    # Registrar nuevo usuario
-    new_user(nombre, telefono, email, password)
+        # Verificar si el usuario ya existe
+        if select_user_email(email):
+            flash("Este correo ya está registrado. Intenta con otro.", "danger")
+            return redirect(url_for('login'))     
+        
+        try:
+            # Registrar nuevo usuario
+            if new_user(nombre, telefono, email, password):
+                # Obtener el usuario recién creado
+                user = select_user_email(email)
+                if user:
+                    user_dict = user.to_dict()
+                    # Iniciar sesión
+                    session['user'] = user_dict
+                    flash("Registro exitoso. ¡Bienvenido!", "success")
+                    return redirect(url_for('index'))
+            else:
+                flash("Error al crear el usuario. Por favor intenta de nuevo.", "danger")
+                return redirect(url_for('login'))
+        except Exception as e:
+            print(f"Error en registro: {str(e)}")
+            flash("Error en el registro. Por favor intenta de nuevo.", "danger")
+            return redirect(url_for('login'))
 
-    # Obtener el usuario recién creado (puedes usar select_user_email)
-    user = select_user_email(email)
-    user_dict = user.to_dict()
-
-    # Iniciar sesión
-    session['user_id'] = user_dict['id']  # Asegúrate de que 'id' esté en la consulta
-    session['user_name'] = user_dict['name']
-
-    flash("Registro exitoso. ¡Bienvenido!", "success")
-    return redirect(url_for('index')) 
+    # Si es GET, redirigir a la página de login
+    return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():

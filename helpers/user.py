@@ -4,24 +4,31 @@ from typing import Union
     
 
 def new_user(name: str, telefono: str, email: str, password: str) -> bool: 
-    barberManager = Connection()  # Suponiendo que esta función devuelve una conexión válida con pymysql
+    try:
+        barberManager = Connection()
 
-    with barberManager.cursor() as cursor:
-        cursor.execute("SELECT * FROM Usuario WHERE correo_electronico = %s", (email,))
-        res = cursor.fetchone()
+        with barberManager.cursor() as cursor:
+            cursor.execute("SELECT * FROM Usuario WHERE correo_electronico = %s", (email,))
+            res = cursor.fetchone()
 
-    if res is not None:  # Si el usuario ya existe
+        if res is not None:  # Si el usuario ya existe
+            return False
+        
+        with barberManager.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO Usuario (nombre_usuario, telefono_usuario, correo_electronico, contraseña) VALUES (%s, %s, %s, %s)",
+                (name, telefono, email, password)  
+            )
+
+        barberManager.commit()  # Guardar los cambios
+        return True
+
+    except Exception as e:
+        print(f"Error al crear usuario: {str(e)}")
         return False
-    
-    with barberManager.cursor() as cursor:
-        cursor.execute(
-            "INSERT INTO Usuario (nombre_usuario, telefono_usuario, correo_electronico, contraseña) VALUES (%s, %s, %s, %s)",
-            (name, telefono, email, password)  
-        )
-
-    barberManager.commit()  # Guardar los cambios
-    barberManager.close()  # Cerrar la conexión
-    return True
+    finally:
+        if 'barberManager' in locals():
+            barberManager.close()  # Cerrar la conexión
 
 
 def select_user_id(id:int):
