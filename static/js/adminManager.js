@@ -135,8 +135,8 @@ function configModal() {
         .catch(error => {
             console.error('Error:', error);
             alert('Error al procesar el pago');
-        });
     });
+  });
 }
 
 

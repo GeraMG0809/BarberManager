@@ -7,7 +7,16 @@ from helpers.servicios import *
 from helpers.producto import *
 from helpers.venta import *
 import os
+from twilio.rest import Client
+from dotenv import load_dotenv
 
+load_dotenv()
+
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+twilio_whatsapp_number = os.getenv('TWILIO_WHATSAPP_NUMBER')
+
+client = Client(account_sid, auth_token)
 
 
 app = Flask(__name__, static_folder='static')
@@ -101,12 +110,15 @@ def register():
                     session['user'] = user_dict
                     flash("Registro exitoso. ¡Bienvenido!", "success")
                     return redirect(url_for('index'))
+                else:
+                    flash("Error al obtener los datos del usuario recién creado.", "danger")
+                    return redirect(url_for('login'))
             else:
                 flash("Error al crear el usuario. Por favor intenta de nuevo.", "danger")
                 return redirect(url_for('login'))
         except Exception as e:
             print(f"Error en registro: {str(e)}")
-            flash("Error en el registro. Por favor intenta de nuevo.", "danger")
+            flash(f"Error interno en el registro: {str(e)}", "danger")
             return redirect(url_for('login'))
 
     # Si es GET, redirigir a la página de login
@@ -142,8 +154,6 @@ def horarios_disponibles():
 
 #Funcion de reservacion nueva
 def new_reserv():
-    nombre = request.form.get("nombre")
-    telefono = request.form.get("telefono")
     fecha = request.form.get("fecha")
     hora = request.form.get("hora")
     barbero = request.form.get("barbero")
@@ -154,15 +164,41 @@ def new_reserv():
     if not user:
         flash("Por favor inicia sesión para hacer una reserva.", "danger")
         return redirect(url_for('login'))
-    else:  # Asegúrate de que esta ruta exista
-        user_id = user.get('id')
-        barber_id = select_barbero_id(barbero)
-        id_servicio = get_servicio_id(servicio)
+    
+    user_id = user.get('id')
+    user_phone = user.get('telefono')
+    user_name = user.get('name')
 
+    barber_id = select_barbero_id(barbero)
+    id_servicio = get_servicio_id(servicio)
+
+    try:
+        # Crear la nueva cita
         new_cita(barber_id, user_id, fecha, hora, id_servicio)
-        flash("¡Reserva creada exitosamente!", "success")
 
-    return redirect(url_for('index'))
+        # Enviar confirmación por WhatsApp
+        if user_phone and twilio_whatsapp_number:
+            message_body = f"¡Hola {user_name}! Tu cita en Barbería Elegante ha sido confirmada para el {fecha} a las {hora} con {barbero} para un {servicio}. ¡Te esperamos!"
+            try:
+                message = client.messages.create(
+                    from_=f'whatsapp:{twilio_whatsapp_number}',
+                    body=message_body,
+                    to=f'whatsapp:{user_phone}'
+                )
+                print(f"Mensaje de WhatsApp enviado: {message.sid}")
+            except Exception as e:
+                print(f"Error al enviar mensaje de WhatsApp: {str(e)}")
+                # Considerar cómo manejar este error (ej: loguearlo, notificar al admin)
+        else:
+            print("Número de teléfono del usuario o número de Twilio no configurado.")
+
+        flash("¡Reserva creada exitosamente!", "success")
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        print(f"Error al crear la reserva: {str(e)}")
+        flash(f"Error al crear la reserva: {str(e)}", "danger")
+        return redirect(url_for('index'))
 
 #Funcion para editar valores de usuario
 def edit_user():
@@ -265,62 +301,61 @@ from datetime import datetime
 
 @app.route('/crear_venta', methods=['POST'])
 def crear_venta():
-    data = request.get_json()
-    
-    id_cita = data.get('id_cita')
-    id_producto = data.get('id_producto')
-    tipo_pago = data.get('tipo_pago')
-    monto_final = data.get('monto_final')
-
-    if not all([id_cita, id_producto, tipo_pago, monto_final]):
-        return jsonify({'error': 'Datos incompletos'}), 400
-
     try:
+        data = request.get_json()
+        
+        id_cita = data.get('id_cita')
+        id_producto = data.get('id_producto')
+        tipo_pago = data.get('tipo_pago')
+        monto_final = data.get('monto_final')
+
+        if not all([id_cita, id_producto, tipo_pago, monto_final]):
+            return jsonify({
+                'success': False,
+                'message': 'Datos incompletos'
+            }), 400
+
+        # Validar que tipo_pago sea válido
+        if tipo_pago not in ['Efectivo', 'Tarjeta']:
+            return jsonify({
+                'success': False,
+                'message': 'Tipo de pago inválido'
+            }), 400
+
         # Insertar la venta
         id_venta = insert_venta(
             id_cita=id_cita,
             id_producto=id_producto,
             tipo_pago=tipo_pago,
-            monto_final=monto_final
+            monto_final=float(monto_final)
         )
 
-        if id_venta:
-            # Actualizar estado de la cita
-            actualizar_estado_cita(id_cita, 'FINALIZADA')
+        if not id_venta:
             return jsonify({
-                'success': True,
-                'message': 'Venta registrada y cita finalizada correctamente'
-            })
-        
-        return jsonify({'error': 'Error al registrar la venta'}), 500
-        
+                'success': False,
+                'message': 'Error al registrar la venta'
+            }), 500
+
+        # Actualizar el estado de la cita a FINALIZADA
+        if not actualizar_estado_cita(id_cita, 'FINALIZADA'):
+            # Si falla la actualización del estado, revertir la venta
+            # Aquí podrías agregar lógica para revertir la venta si lo consideras necesario
+            return jsonify({
+                'success': False,
+                'message': 'Error al actualizar el estado de la cita'
+            }), 500
+
+        return jsonify({
+            'success': True,
+            'message': 'Venta registrada y cita finalizada correctamente',
+            'id_venta': id_venta
+        })
+            
     except Exception as e:
-        print(f"Error en crear_venta: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-
-
-@app.route('/precio_producto', methods=['GET'])
-def obtener_precio_producto():
-    producto_id = request.args.get('id', type=int)
-    monto_servicio = request.args.get('monto', type=float)
-
-    # Suponemos que el nombre del producto es lo que se envía en el 'id'
-    producto_nombre = request.args.get('nombre_producto', type=str)
-    
-    # Consulta el precio del producto usando la función de tu CRUD
-    precio_producto = select_producto_precio(producto_nombre)
-    
-    if precio_producto is None:
-        return jsonify({'error': 'Producto no encontrado'}), 404
-    
-    # Calcula el monto final
-    monto_final = monto_servicio + precio_producto
-    return jsonify({
-        'precio_producto': precio_producto,
-        'monto_final': round(monto_final, 2)
-    })
-
+        return jsonify({
+            'success': False,
+            'message': f'Error: {str(e)}'
+        }), 500
 
 
 
