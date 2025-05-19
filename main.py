@@ -7,16 +7,6 @@ from helpers.servicios import *
 from helpers.producto import *
 from helpers.venta import *
 import os
-from twilio.rest import Client
-from dotenv import load_dotenv
-
-load_dotenv()
-
-account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-auth_token = os.getenv('TWILIO_AUTH_TOKEN')
-twilio_whatsapp_number = os.getenv('TWILIO_WHATSAPP_NUMBER')
-
-client = Client(account_sid, auth_token)
 
 
 app = Flask(__name__, static_folder='static')
@@ -166,8 +156,8 @@ def new_reserv():
         return redirect(url_for('login'))
     
     user_id = user.get('id')
-    user_phone = user.get('telefono')
-    user_name = user.get('name')
+    user_phone = user.get('telefono') # Aunque no se usará para Twilio, puede ser útil para otros fines
+    user_name = user.get('name') # Aunque no se usará para Twilio, puede ser útil para otros fines
 
     barber_id = select_barbero_id(barbero)
     id_servicio = get_servicio_id(servicio)
@@ -175,22 +165,6 @@ def new_reserv():
     try:
         # Crear la nueva cita
         new_cita(barber_id, user_id, fecha, hora, id_servicio)
-
-        # Enviar confirmación por WhatsApp
-        if user_phone and twilio_whatsapp_number:
-            message_body = f"¡Hola {user_name}! Tu cita en Barbería Elegante ha sido confirmada para el {fecha} a las {hora} con {barbero} para un {servicio}. ¡Te esperamos!"
-            try:
-                message = client.messages.create(
-                    from_=f'whatsapp:{twilio_whatsapp_number}',
-                    body=message_body,
-                    to=f'whatsapp:{user_phone}'
-                )
-                print(f"Mensaje de WhatsApp enviado: {message.sid}")
-            except Exception as e:
-                print(f"Error al enviar mensaje de WhatsApp: {str(e)}")
-                # Considerar cómo manejar este error (ej: loguearlo, notificar al admin)
-        else:
-            print("Número de teléfono del usuario o número de Twilio no configurado.")
 
         flash("¡Reserva creada exitosamente!", "success")
         return redirect(url_for('index'))
@@ -345,6 +319,7 @@ def crear_venta():
                 'message': 'Error al actualizar el estado de la cita'
             }), 500
 
+        # La venta y la cita se finalizaron correctamente
         return jsonify({
             'success': True,
             'message': 'Venta registrada y cita finalizada correctamente',
@@ -356,8 +331,6 @@ def crear_venta():
             'success': False,
             'message': f'Error: {str(e)}'
         }), 500
-
-
 
 
 if __name__ == '__main__':

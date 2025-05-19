@@ -152,3 +152,54 @@ def actualizar_estado_cita(id_cita: int, estado: str) -> bool:
         return False
     finally:
         barberManager.close()
+
+def select_cita_by_id(id_cita: int):
+    """
+    Obtiene los detalles completos de una cita por su ID.
+    Args:
+        id_cita: ID de la cita a buscar.
+    Returns:
+        dict: Diccionario con los detalles de la cita o None si no se encuentra.
+    """
+    barberManager = Connection()
+    try:
+        with barberManager.cursor() as cursor:
+            cursor.execute("""
+                SELECT 
+                    C.id_cita,
+                    U.nombre_usuario,
+                    U.telefono_usuario, -- Incluir el teléfono del usuario
+                    B.nombre_barbero,
+                    S.nombre_servicio,
+                    S.precio,
+                    C.fecha,
+                    C.hora_cita,
+                    C.estado
+                FROM Cita C
+                JOIN Usuario U ON C.id_usuario = U.id_usuario
+                JOIN Barbero B ON C.id_barbero = B.id_barbero
+                JOIN Servicios S ON C.id_servicio = S.id_servicio
+                WHERE C.id_cita = %s
+            """, (id_cita,))
+            resultado = cursor.fetchone()
+            if resultado:
+                # Mapear los resultados a un diccionario para facilitar el acceso
+                cita_dict = {
+                    'id_cita': resultado[0],
+                    'cliente': resultado[1],
+                    'telefono_cliente': resultado[2], # Teléfono del cliente
+                    'barbero': resultado[3],
+                    'servicio': resultado[4],
+                    'precio': resultado[5],
+                    'fecha': str(resultado[6]), # Convertir fecha a string
+                    'hora': str(resultado[7]), # Convertir hora a string
+                    'estado': resultado[8]
+                }
+                return cita_dict
+            else:
+                return None
+    except Exception as e:
+        print(f"Error al obtener cita por ID: {e}")
+        return None
+    finally:
+        barberManager.close()

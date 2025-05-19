@@ -32,24 +32,27 @@ def insert_venta(id_cita, id_producto, tipo_pago, monto_final):
 def select_venta(id_venta):
     conexion = Connection()
     try:
-    with conexion.cursor() as cursor:
+        with conexion.cursor() as cursor:
             cursor.execute("""
                 SELECT v.*, p.nombre_producto, p.precio as precio_producto
                 FROM Ventas v 
                 JOIN Productos p ON v.id_producto = p.id_producto
                 WHERE v.id_venta = %s
             """, (id_venta,))
-        resultado = cursor.fetchone()
+            resultado = cursor.fetchone()
             return Venta(resultado).to_dict() if resultado else None
+    except Exception as e:
+        print(f"Error al obtener venta por ID: {e}")
+        return None
     finally:
-    conexion.close()
+        conexion.close()
 
 # Obtener todas las ventas activas
 def select_all_ventas():
     conexion = Connection()
     ventas = []
     try:
-    with conexion.cursor() as cursor:
+        with conexion.cursor() as cursor:
             cursor.execute("""
                 SELECT v.*, p.nombre_producto, p.precio as precio_producto
                 FROM Ventas v 
@@ -57,9 +60,12 @@ def select_all_ventas():
                 WHERE v.estado = 'ACTIVO'
                 ORDER BY v.fecha DESC
             """)
-        resultados = cursor.fetchall()
-        for venta in resultados:
-            ventas.append(Venta(venta).to_dict())
+            resultados = cursor.fetchall()
+            for venta in resultados:
+                ventas.append(Venta(venta).to_dict())
+        return ventas
+    except Exception as e:
+        print(f"Error al obtener todas las ventas: {e}")
+        return []
     finally:
-    conexion.close()
-    return ventas
+        conexion.close()

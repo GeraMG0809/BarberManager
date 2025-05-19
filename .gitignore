@@ -21,6 +21,7 @@ VENV/
 
 # Archivos de base de datos SQLite
 *.sqlite3
+.backup-barbermanager.sql
 
 # Archivos de configuración del editor
 .vscode/
