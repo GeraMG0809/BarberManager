@@ -60,27 +60,3 @@ CREATE TABLE Servicios (
     estado ENUM('ACTIVO', 'INACTIVO') NOT NULL DEFAULT 'ACTIVO',
     nombre_servicio VARCHAR(35) NOT NULL
 );
-
-<<<<<<< HEAD
-CREATE TABLE Ventas (
-    id_venta INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    id_cita INT NOT NULL,
-=======
-CREATE TABLE Ventas(
-    id_venta INT AUTO_INCREMENT PRIMARY KEY,
-    id_cita  INT NOT NULL,
-    id_producto INT NOT NULL,
->>>>>>> 0ac6a7a595adb0b486dc117035bfbae8994ed256
-    fecha TIMESTAMP NOT NULL,
-    tipo_pago ENUM('Efectivo','Tarjeta') NOT NULL,
-    monto_final FLOAT NOT NULL,
-<<<<<<< HEAD
-    estado ENUM('ACTIVO', 'INACTIVO') NOT NULL DEFAULT 'ACTIVO',
-    FOREIGN KEY (id_cita) REFERENCES Cita(id_cita)
-);
-=======
-    estado ENUM('ACTIVO','INACTIVO') NOT NULL DEFAULT 'ACTIVO',
-    FOREIGN KEY (id_cita) REFERENCES Cita(id_cita),
-    FOREIGN KEY (id_producto) REFERENCES Productos(id_producto)
-);
->>>>>>> 0ac6a7a595adb0b486dc117035bfbae8994ed256
