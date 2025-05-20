@@ -9,7 +9,6 @@ from helpers.venta import *
 import os
 
 
-
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'tu_clave_secreta_segura'  
 
@@ -74,34 +73,46 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    nombre = request.form.get("nombre")
-    telefono = request.form.get("telefono")
-    email = request.form.get("correo_electronico")
-    password = request.form.get("password")
+    if request.method == 'POST':
+        nombre = request.form.get("nombre")
+        telefono = request.form.get("telefono")
+        email = request.form.get("correo_electronico")
+        password = request.form.get("password")
 
-    # Validación de campos vacíos (opcional pero recomendado)
-    if not nombre or not telefono or not email or not password:
-        flash("Todos los campos son obligatorios", "warning")
-        return redirect('/registro')
+        # Validación de campos vacíos
+        if not nombre or not telefono or not email or not password:
+            flash("Todos los campos son obligatorios", "warning")
+            return redirect(url_for('login'))
 
-    # Verificar si el usuario ya existe
-    if select_user_email(email):
-        flash("Este correo ya está registrado. Intenta con otro.", "danger")
-        return redirect(url_for('index'))     
-    
-    # Registrar nuevo usuario
-    new_user(nombre, telefono, email, password)
+        # Verificar si el usuario ya existe
+        if select_user_email(email):
+            flash("Este correo ya está registrado. Intenta con otro.", "danger")
+            return redirect(url_for('login'))     
+        
+        try:
+            # Registrar nuevo usuario
+            if new_user(nombre, telefono, email, password):
+                # Obtener el usuario recién creado
+                user = select_user_email(email)
+                if user:
+                    user_dict = user.to_dict()
+                    # Iniciar sesión
+                    session['user'] = user_dict
+                    flash("Registro exitoso. ¡Bienvenido!", "success")
+                    return redirect(url_for('index'))
+                else:
+                    flash("Error al obtener los datos del usuario recién creado.", "danger")
+                    return redirect(url_for('login'))
+            else:
+                flash("Error al crear el usuario. Por favor intenta de nuevo.", "danger")
+                return redirect(url_for('login'))
+        except Exception as e:
+            print(f"Error en registro: {str(e)}")
+            flash(f"Error interno en el registro: {str(e)}", "danger")
+            return redirect(url_for('login'))
 
-    # Obtener el usuario recién creado (puedes usar select_user_email)
-    user = select_user_email(email)
-    user_dict = user.to_dict()
-
-    # Iniciar sesión
-    session['user_id'] = user_dict['id']  # Asegúrate de que 'id' esté en la consulta
-    session['user_name'] = user_dict['name']
-
-    flash("Registro exitoso. ¡Bienvenido!", "success")
-    return redirect(url_for('index')) 
+    # Si es GET, redirigir a la página de login
+    return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
@@ -133,8 +144,6 @@ def horarios_disponibles():
 
 #Funcion de reservacion nueva
 def new_reserv():
-    nombre = request.form.get("nombre")
-    telefono = request.form.get("telefono")
     fecha = request.form.get("fecha")
     hora = request.form.get("hora")
     barbero = request.form.get("barbero")
@@ -145,15 +154,25 @@ def new_reserv():
     if not user:
         flash("Por favor inicia sesión para hacer una reserva.", "danger")
         return redirect(url_for('login'))
-    else:  # Asegúrate de que esta ruta exista
-        user_id = user.get('id')
-        barber_id = select_barbero_id(barbero)
-        id_servicio = get_servicio_id(servicio)
+    
+    user_id = user.get('id')
+    user_phone = user.get('telefono') # Aunque no se usará para Twilio, puede ser útil para otros fines
+    user_name = user.get('name') # Aunque no se usará para Twilio, puede ser útil para otros fines
 
+    barber_id = select_barbero_id(barbero)
+    id_servicio = get_servicio_id(servicio)
+
+    try:
+        # Crear la nueva cita
         new_cita(barber_id, user_id, fecha, hora, id_servicio)
-        flash("¡Reserva creada exitosamente!", "success")
 
-    return redirect(url_for('index'))
+        flash("¡Reserva creada exitosamente!", "success")
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        print(f"Error al crear la reserva: {str(e)}")
+        flash(f"Error al crear la reserva: {str(e)}", "danger")
+        return redirect(url_for('index'))
 
 #Funcion para editar valores de usuario
 def edit_user():
@@ -256,45 +275,62 @@ from datetime import datetime
 
 @app.route('/crear_venta', methods=['POST'])
 def crear_venta():
-    data = request.get_json()
-    
-    id_cita = data.get('id_cita')
-    tipo_pago = data.get('tipo_pago')
-    monto_final = data.get('monto_final')
+    try:
+        data = request.get_json()
+        
+        id_cita = data.get('id_cita')
+        id_producto = data.get('id_producto')
+        tipo_pago = data.get('tipo_pago')
+        monto_final = data.get('monto_final')
 
-    if not id_cita or not tipo_pago or monto_final is None:
-        return jsonify({'error': 'Datos incompletos'}), 400
+        if not all([id_cita, id_producto, tipo_pago, monto_final]):
+            return jsonify({
+                'success': False,
+                'message': 'Datos incompletos'
+            }), 400
 
-    # Insertar la venta
-    insert_venta(id_cita=id_cita, tipo_pago=tipo_pago, monto_final=monto_final)
+        # Validar que tipo_pago sea válido
+        if tipo_pago not in ['Efectivo', 'Tarjeta']:
+            return jsonify({
+                'success': False,
+                'message': 'Tipo de pago inválido'
+            }), 400
 
-    return redirect('adminManager')
+        # Insertar la venta
+        id_venta = insert_venta(
+            id_cita=id_cita,
+            id_producto=id_producto,
+            tipo_pago=tipo_pago,
+            monto_final=float(monto_final)
+        )
 
+        if not id_venta:
+            return jsonify({
+                'success': False,
+                'message': 'Error al registrar la venta'
+            }), 500
 
+        # Actualizar el estado de la cita a FINALIZADA
+        if not actualizar_estado_cita(id_cita, 'FINALIZADA'):
+            # Si falla la actualización del estado, revertir la venta
+            # Aquí podrías agregar lógica para revertir la venta si lo consideras necesario
+            return jsonify({
+                'success': False,
+                'message': 'Error al actualizar el estado de la cita'
+            }), 500
 
-@app.route('/precio_producto', methods=['GET'])
-def obtener_precio_producto():
-    producto_id = request.args.get('id', type=int)
-    monto_servicio = request.args.get('monto', type=float)
-
-    # Suponemos que el nombre del producto es lo que se envía en el 'id'
-    producto_nombre = request.args.get('nombre_producto', type=str)
-    
-    # Consulta el precio del producto usando la función de tu CRUD
-    precio_producto = select_producto_precio(producto_nombre)
-    
-    if precio_producto is None:
-        return jsonify({'error': 'Producto no encontrado'}), 404
-    
-    # Calcula el monto final
-    monto_final = monto_servicio + precio_producto
-    return jsonify({
-        'precio_producto': precio_producto,
-        'monto_final': round(monto_final, 2)
-    })
-
-
-
+        # La venta y la cita se finalizaron correctamente
+        return jsonify({
+            'success': True,
+            'message': 'Venta registrada y cita finalizada correctamente',
+            'id_venta': id_venta
+        })
+            
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error: {str(e)}'
+        }), 500
 
 
 if __name__ == '__main__':

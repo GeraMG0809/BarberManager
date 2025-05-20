@@ -16,7 +16,7 @@
     <div class="container">
         <!-- INICIO DE SESION -->
         <div class="container-form">
-            <form class="sign-in" method="POST" action="{{ url_for('login') }}">
+            <form class="sign-in" id="loginForm" method="POST" action="{{ url_for('login') }}">
                 <h2>Iniciar sesión</h2>
                 <div class="social-networks">
                     <ion-icon name="logo-twitter"></ion-icon>
@@ -87,7 +87,7 @@
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
 <!-- custom js file link -->
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/loginScript.js') }}"></script>
 
 <script>
     lightGallery(document.querySelector('.gallery .lightbox'));
